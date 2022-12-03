@@ -100,7 +100,8 @@ exports.Prisma.AccountsScalarFieldEnum = makeEnum({
   password: 'password',
   name: 'name',
   isVerify: 'isVerify',
-  isApprove: 'isApprove'
+  isApprove: 'isApprove',
+  ServiceKey: 'ServiceKey'
 });
 
 exports.Prisma.AlertsScalarFieldEnum = makeEnum({
@@ -209,6 +210,22 @@ exports.Prisma.JsonNullValueFilter = makeEnum({
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+});
+
+exports.Prisma.LandsScalarFieldEnum = makeEnum({
+  id: 'id',
+  AccountId: 'AccountId',
+  is_active: 'is_active',
+  type: 'type',
+  villageName: 'villageName',
+  status: 'status',
+  geometry: 'geometry',
+  x: 'x',
+  y: 'y',
+  area: 'area',
+  extra: 'extra',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
 exports.Prisma.NoticesScalarFieldEnum = makeEnum({
@@ -364,6 +381,14 @@ exports.Prisma.SequelizeMetaScalarFieldEnum = makeEnum({
   name: 'name'
 });
 
+exports.Prisma.ServicesScalarFieldEnum = makeEnum({
+  key: 'key',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+});
+
 exports.Prisma.SortOrder = makeEnum({
   asc: 'asc',
   desc: 'desc'
@@ -503,6 +528,7 @@ exports.Prisma.ModelName = makeEnum({
   Discounts: 'Discounts',
   Events: 'Events',
   Geos: 'Geos',
+  Lands: 'Lands',
   Notices: 'Notices',
   Notifications: 'Notifications',
   OrderHistories: 'OrderHistories',
@@ -513,6 +539,7 @@ exports.Prisma.ModelName = makeEnum({
   Products: 'Products',
   Reports: 'Reports',
   SequelizeMeta: 'SequelizeMeta',
+  Services: 'Services',
   Statistics: 'Statistics',
   Subscribes: 'Subscribes',
   TaskDetailResources: 'TaskDetailResources',

@@ -47,9 +47,13 @@ const authUtil = {
     }
 }
 
+//======================================================================
 
 const { PrismaClient: ReplicaPrismaClient } = require('../prisma/replicaClient/index.js');
 const replicaClient = new ReplicaPrismaClient();
+
+const { PrismaClient: Replica2PrismaClient } = require('../prisma/replica2Client/index.js');
+const replica2Client = new Replica2PrismaClient();
 
 async function load_replica(request_type) {
     if (request_type == 'pilot') {
@@ -100,6 +104,15 @@ async function load_replica(request_type) {
         return pilotResult;
     }
 
+    if (request_type == 'farmer') {
+        const farmerResult = await replica2Client.Users.
+            findMany({
+            })
+
+        console.log(farmerResult);
+        return farmerResult;
+    }
+
     if (request_type == 'taskgroup') {
         const tgResult = await replicaClient.TaskGroups.
             findMany({
@@ -114,6 +127,20 @@ async function load_replica(request_type) {
                         select: {
                             name: true
                         }
+                    },
+                    _count: {
+                        select: {
+                            Tasks: true
+                        }
+                    },
+                    Tasks: {
+                        select: {
+                            _count: {
+                                select: {
+                                    TaskDetails: true
+                                }
+                            }
+                        }
                     }
                 }
             })
@@ -124,8 +151,25 @@ async function load_replica(request_type) {
                 delete tgResult[i].Accounts;
             }
             catch (e) { }
+
+            try {
+                tgResult[i].TaskCount = tgResult[i]._count.Tasks;
+                delete tgResult[i]._count;
+            }
+            catch (e) { }
+
+            try {
+                var sum = 0;
+                for(var j = 0; j < tgResult[i].Tasks.length; j++){
+                    sum += tgResult[i].Tasks[j]._count.TaskDetails;
+                }
+                tgResult[i].TDCount = sum;
+                delete tgResult[i].Tasks;
+            }
+            catch (e) { }
         }
 
+        //console.log(tgResult);
         return tgResult;
     }
 
@@ -145,9 +189,20 @@ async function load_replica(request_type) {
                             name: true
                         }
                     },
+                    TaskDetails: {
+                        select: {
+                            address: true
+                        }
+                    },
                     TaskGroups: {
                         select: {
                             name: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            TaskDetails: true,
+                            Teams: true
                         }
                     }
                 }
@@ -165,9 +220,25 @@ async function load_replica(request_type) {
                 delete taskResult[i].TaskGroups;
             }
             catch (e) { }
+
+            try {
+                taskResult[i].RepresentAddress = taskResult[i].TaskDetails[0].address;
+                delete taskResult[i].TaskDetails;
+            }
+            catch (e) { }
+
+            try {
+                taskResult[i].TDCount = taskResult[i]._count.TaskDetails;
+            }
+            catch (e) { }
+
+            try {
+                taskResult[i].TeamCount = taskResult[i]._count.Teams;
+                delete taskResult[i]._count;
+            }
+            catch (e) { }
         }
 
-        //console.log(pilotResult);
         return taskResult;
     }
 
@@ -237,6 +308,11 @@ async function load_replica(request_type) {
                                 }
                             }
                         }
+                    },
+                    _count: {
+                        select: {
+                            TaskDetails: true
+                        }
                     }
                 }
             })
@@ -252,9 +328,15 @@ async function load_replica(request_type) {
                 delete teamResult[i].Tasks;
             }
             catch (e) { }
+
+            try {
+                teamResult[i].TDCount = teamResult[i]._count.TaskDetails;
+                delete teamResult[i]._count;
+            }
+            catch (e) { }
         }
 
-        //console.log(pilotResult);
+        //console.log(teamResult);
         return teamResult;
     }
 }

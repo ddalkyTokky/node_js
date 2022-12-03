@@ -29,6 +29,7 @@ export type Accounts = {
   name: string | null
   isVerify: boolean | null
   isApprove: boolean | null
+  ServiceKey: string | null
 }
 
 /**
@@ -161,6 +162,26 @@ export type Geos = {
   y: string | null
   pnu: string | null
   area: Prisma.Decimal | null
+  createdAt: Date
+  updatedAt: Date
+}
+
+/**
+ * Model Lands
+ * 
+ */
+export type Lands = {
+  id: bigint
+  AccountId: number
+  is_active: boolean | null
+  type: string | null
+  villageName: string | null
+  status: string | null
+  geometry: Prisma.JsonValue | null
+  x: string | null
+  y: string | null
+  area: Prisma.Decimal | null
+  extra: Prisma.JsonValue | null
   createdAt: Date
   updatedAt: Date
 }
@@ -346,6 +367,18 @@ export type Reports = {
  */
 export type SequelizeMeta = {
   name: string
+}
+
+/**
+ * Model Services
+ * 
+ */
+export type Services = {
+  key: string
+  description: string | null
+  isActive: boolean | null
+  createdAt: Date
+  updatedAt: Date
 }
 
 /**
@@ -740,6 +773,16 @@ export class PrismaClient<
   get geos(): Prisma.GeosDelegate<GlobalReject>;
 
   /**
+   * `prisma.lands`: Exposes CRUD operations for the **Lands** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Lands
+    * const lands = await prisma.lands.findMany()
+    * ```
+    */
+  get lands(): Prisma.LandsDelegate<GlobalReject>;
+
+  /**
    * `prisma.notices`: Exposes CRUD operations for the **Notices** model.
     * Example usage:
     * ```ts
@@ -838,6 +881,16 @@ export class PrismaClient<
     * ```
     */
   get sequelizeMeta(): Prisma.SequelizeMetaDelegate<GlobalReject>;
+
+  /**
+   * `prisma.services`: Exposes CRUD operations for the **Services** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Services
+    * const services = await prisma.services.findMany()
+    * ```
+    */
+  get services(): Prisma.ServicesDelegate<GlobalReject>;
 
   /**
    * `prisma.statistics`: Exposes CRUD operations for the **Statistics** model.
@@ -1415,6 +1468,7 @@ export namespace Prisma {
     Discounts: 'Discounts',
     Events: 'Events',
     Geos: 'Geos',
+    Lands: 'Lands',
     Notices: 'Notices',
     Notifications: 'Notifications',
     OrderHistories: 'OrderHistories',
@@ -1425,6 +1479,7 @@ export namespace Prisma {
     Products: 'Products',
     Reports: 'Reports',
     SequelizeMeta: 'SequelizeMeta',
+    Services: 'Services',
     Statistics: 'Statistics',
     Subscribes: 'Subscribes',
     TaskDetailResources: 'TaskDetailResources',
@@ -1602,6 +1657,7 @@ export namespace Prisma {
     CustomerTaskDetails: number
     Customers: number
     Discounts: number
+    Lands: number
     Notifications: number
     OrderHistories: number
     Orders: number
@@ -1626,6 +1682,7 @@ export namespace Prisma {
     CustomerTaskDetails?: boolean
     Customers?: boolean
     Discounts?: boolean
+    Lands?: boolean
     Notifications?: boolean
     OrderHistories?: boolean
     Orders?: boolean
@@ -1932,6 +1989,55 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ServicesCountOutputType
+   */
+
+
+  export type ServicesCountOutputType = {
+    Accounts: number
+  }
+
+  export type ServicesCountOutputTypeSelect = {
+    Accounts?: boolean
+  }
+
+  export type ServicesCountOutputTypeGetPayload<
+    S extends boolean | null | undefined | ServicesCountOutputTypeArgs,
+    U = keyof S
+      > = S extends true
+        ? ServicesCountOutputType
+    : S extends undefined
+    ? never
+    : S extends ServicesCountOutputTypeArgs
+    ?'include' extends U
+    ? ServicesCountOutputType 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+    P extends keyof ServicesCountOutputType ? ServicesCountOutputType[P] : never
+  } 
+    : ServicesCountOutputType
+  : ServicesCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * ServicesCountOutputType without action
+   */
+  export type ServicesCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the ServicesCountOutputType
+     * 
+    **/
+    select?: ServicesCountOutputTypeSelect | null
+  }
+
+
+
+  /**
    * Count Type TaskDetailsCountOutputType
    */
 
@@ -2176,6 +2282,7 @@ export namespace Prisma {
     name: string | null
     isVerify: boolean | null
     isApprove: boolean | null
+    ServiceKey: string | null
   }
 
   export type AccountsMaxAggregateOutputType = {
@@ -2190,6 +2297,7 @@ export namespace Prisma {
     name: string | null
     isVerify: boolean | null
     isApprove: boolean | null
+    ServiceKey: string | null
   }
 
   export type AccountsCountAggregateOutputType = {
@@ -2205,6 +2313,7 @@ export namespace Prisma {
     name: number
     isVerify: number
     isApprove: number
+    ServiceKey: number
     _all: number
   }
 
@@ -2231,6 +2340,7 @@ export namespace Prisma {
     name?: true
     isVerify?: true
     isApprove?: true
+    ServiceKey?: true
   }
 
   export type AccountsMaxAggregateInputType = {
@@ -2245,6 +2355,7 @@ export namespace Prisma {
     name?: true
     isVerify?: true
     isApprove?: true
+    ServiceKey?: true
   }
 
   export type AccountsCountAggregateInputType = {
@@ -2260,6 +2371,7 @@ export namespace Prisma {
     name?: true
     isVerify?: true
     isApprove?: true
+    ServiceKey?: true
     _all?: true
   }
 
@@ -2368,6 +2480,7 @@ export namespace Prisma {
     name: string | null
     isVerify: boolean | null
     isApprove: boolean | null
+    ServiceKey: string | null
     _count: AccountsCountAggregateOutputType | null
     _avg: AccountsAvgAggregateOutputType | null
     _sum: AccountsSumAggregateOutputType | null
@@ -2402,11 +2515,14 @@ export namespace Prisma {
     name?: boolean
     isVerify?: boolean
     isApprove?: boolean
+    ServiceKey?: boolean
+    Services?: boolean | ServicesArgs
     Alerts?: boolean | AlertsFindManyArgs
     Careers?: boolean | CareersFindManyArgs
     CustomerTaskDetails?: boolean | CustomerTaskDetailsFindManyArgs
     Customers?: boolean | CustomersFindManyArgs
     Discounts?: boolean | DiscountsFindManyArgs
+    Lands?: boolean | LandsFindManyArgs
     Notifications?: boolean | NotificationsFindManyArgs
     OrderHistories?: boolean | OrderHistoriesFindManyArgs
     Orders?: boolean | OrdersFindManyArgs
@@ -2427,11 +2543,13 @@ export namespace Prisma {
   }
 
   export type AccountsInclude = {
+    Services?: boolean | ServicesArgs
     Alerts?: boolean | AlertsFindManyArgs
     Careers?: boolean | CareersFindManyArgs
     CustomerTaskDetails?: boolean | CustomerTaskDetailsFindManyArgs
     Customers?: boolean | CustomersFindManyArgs
     Discounts?: boolean | DiscountsFindManyArgs
+    Lands?: boolean | LandsFindManyArgs
     Notifications?: boolean | NotificationsFindManyArgs
     OrderHistories?: boolean | OrderHistoriesFindManyArgs
     Orders?: boolean | OrdersFindManyArgs
@@ -2462,11 +2580,13 @@ export namespace Prisma {
     ?'include' extends U
     ? Accounts  & {
     [P in TrueKeys<S['include']>]:
+        P extends 'Services' ? ServicesGetPayload<Exclude<S['include'], undefined | null>[P]> | null :
         P extends 'Alerts' ? Array < AlertsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'Careers' ? Array < CareersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'CustomerTaskDetails' ? Array < CustomerTaskDetailsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'Customers' ? Array < CustomersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'Discounts' ? Array < DiscountsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'Lands' ? Array < LandsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'Notifications' ? Array < NotificationsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'OrderHistories' ? Array < OrderHistoriesGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'Orders' ? Array < OrdersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
@@ -2488,11 +2608,13 @@ export namespace Prisma {
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
+        P extends 'Services' ? ServicesGetPayload<Exclude<S['select'], undefined | null>[P]> | null :
         P extends 'Alerts' ? Array < AlertsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'Careers' ? Array < CareersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'CustomerTaskDetails' ? Array < CustomerTaskDetailsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'Customers' ? Array < CustomersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'Discounts' ? Array < DiscountsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'Lands' ? Array < LandsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'Notifications' ? Array < NotificationsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'OrderHistories' ? Array < OrderHistoriesGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'Orders' ? Array < OrdersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
@@ -2884,6 +3006,8 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
+    Services<T extends ServicesArgs = {}>(args?: Subset<T, ServicesArgs>): CheckSelect<T, Prisma__ServicesClient<Services | Null>, Prisma__ServicesClient<ServicesGetPayload<T> | Null>>;
+
     Alerts<T extends AlertsFindManyArgs = {}>(args?: Subset<T, AlertsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Alerts>| Null>, PrismaPromise<Array<AlertsGetPayload<T>>| Null>>;
 
     Careers<T extends CareersFindManyArgs = {}>(args?: Subset<T, CareersFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Careers>| Null>, PrismaPromise<Array<CareersGetPayload<T>>| Null>>;
@@ -2893,6 +3017,8 @@ export namespace Prisma {
     Customers<T extends CustomersFindManyArgs = {}>(args?: Subset<T, CustomersFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Customers>| Null>, PrismaPromise<Array<CustomersGetPayload<T>>| Null>>;
 
     Discounts<T extends DiscountsFindManyArgs = {}>(args?: Subset<T, DiscountsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Discounts>| Null>, PrismaPromise<Array<DiscountsGetPayload<T>>| Null>>;
+
+    Lands<T extends LandsFindManyArgs = {}>(args?: Subset<T, LandsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Lands>| Null>, PrismaPromise<Array<LandsGetPayload<T>>| Null>>;
 
     Notifications<T extends NotificationsFindManyArgs = {}>(args?: Subset<T, NotificationsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Notifications>| Null>, PrismaPromise<Array<NotificationsGetPayload<T>>| Null>>;
 
@@ -11232,6 +11358,1029 @@ export namespace Prisma {
      * 
     **/
     select?: GeosSelect | null
+  }
+
+
+
+  /**
+   * Model Lands
+   */
+
+
+  export type AggregateLands = {
+    _count: LandsCountAggregateOutputType | null
+    _avg: LandsAvgAggregateOutputType | null
+    _sum: LandsSumAggregateOutputType | null
+    _min: LandsMinAggregateOutputType | null
+    _max: LandsMaxAggregateOutputType | null
+  }
+
+  export type LandsAvgAggregateOutputType = {
+    id: number | null
+    AccountId: number | null
+    area: Decimal | null
+  }
+
+  export type LandsSumAggregateOutputType = {
+    id: bigint | null
+    AccountId: number | null
+    area: Decimal | null
+  }
+
+  export type LandsMinAggregateOutputType = {
+    id: bigint | null
+    AccountId: number | null
+    is_active: boolean | null
+    type: string | null
+    villageName: string | null
+    status: string | null
+    x: string | null
+    y: string | null
+    area: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandsMaxAggregateOutputType = {
+    id: bigint | null
+    AccountId: number | null
+    is_active: boolean | null
+    type: string | null
+    villageName: string | null
+    status: string | null
+    x: string | null
+    y: string | null
+    area: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandsCountAggregateOutputType = {
+    id: number
+    AccountId: number
+    is_active: number
+    type: number
+    villageName: number
+    status: number
+    geometry: number
+    x: number
+    y: number
+    area: number
+    extra: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LandsAvgAggregateInputType = {
+    id?: true
+    AccountId?: true
+    area?: true
+  }
+
+  export type LandsSumAggregateInputType = {
+    id?: true
+    AccountId?: true
+    area?: true
+  }
+
+  export type LandsMinAggregateInputType = {
+    id?: true
+    AccountId?: true
+    is_active?: true
+    type?: true
+    villageName?: true
+    status?: true
+    x?: true
+    y?: true
+    area?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandsMaxAggregateInputType = {
+    id?: true
+    AccountId?: true
+    is_active?: true
+    type?: true
+    villageName?: true
+    status?: true
+    x?: true
+    y?: true
+    area?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandsCountAggregateInputType = {
+    id?: true
+    AccountId?: true
+    is_active?: true
+    type?: true
+    villageName?: true
+    status?: true
+    geometry?: true
+    x?: true
+    y?: true
+    area?: true
+    extra?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LandsAggregateArgs = {
+    /**
+     * Filter which Lands to aggregate.
+     * 
+    **/
+    where?: LandsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lands to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<LandsOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: LandsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lands from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lands.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Lands
+    **/
+    _count?: true | LandsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LandsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LandsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LandsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LandsMaxAggregateInputType
+  }
+
+  export type GetLandsAggregateType<T extends LandsAggregateArgs> = {
+        [P in keyof T & keyof AggregateLands]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLands[P]>
+      : GetScalarType<T[P], AggregateLands[P]>
+  }
+
+
+
+
+  export type LandsGroupByArgs = {
+    where?: LandsWhereInput
+    orderBy?: Enumerable<LandsOrderByWithAggregationInput>
+    by: Array<LandsScalarFieldEnum>
+    having?: LandsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LandsCountAggregateInputType | true
+    _avg?: LandsAvgAggregateInputType
+    _sum?: LandsSumAggregateInputType
+    _min?: LandsMinAggregateInputType
+    _max?: LandsMaxAggregateInputType
+  }
+
+
+  export type LandsGroupByOutputType = {
+    id: bigint
+    AccountId: number
+    is_active: boolean | null
+    type: string | null
+    villageName: string | null
+    status: string | null
+    geometry: JsonValue | null
+    x: string | null
+    y: string | null
+    area: Decimal | null
+    extra: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: LandsCountAggregateOutputType | null
+    _avg: LandsAvgAggregateOutputType | null
+    _sum: LandsSumAggregateOutputType | null
+    _min: LandsMinAggregateOutputType | null
+    _max: LandsMaxAggregateOutputType | null
+  }
+
+  type GetLandsGroupByPayload<T extends LandsGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<LandsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LandsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LandsGroupByOutputType[P]>
+            : GetScalarType<T[P], LandsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LandsSelect = {
+    id?: boolean
+    AccountId?: boolean
+    is_active?: boolean
+    type?: boolean
+    villageName?: boolean
+    status?: boolean
+    geometry?: boolean
+    x?: boolean
+    y?: boolean
+    area?: boolean
+    extra?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Accounts?: boolean | AccountsArgs
+  }
+
+  export type LandsInclude = {
+    Accounts?: boolean | AccountsArgs
+  }
+
+  export type LandsGetPayload<
+    S extends boolean | null | undefined | LandsArgs,
+    U = keyof S
+      > = S extends true
+        ? Lands
+    : S extends undefined
+    ? never
+    : S extends LandsArgs | LandsFindManyArgs
+    ?'include' extends U
+    ? Lands  & {
+    [P in TrueKeys<S['include']>]:
+        P extends 'Accounts' ? AccountsGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
+  } 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+        P extends 'Accounts' ? AccountsGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof Lands ? Lands[P] : never
+  } 
+    : Lands
+  : Lands
+
+
+  type LandsCountArgs = Merge<
+    Omit<LandsFindManyArgs, 'select' | 'include'> & {
+      select?: LandsCountAggregateInputType | true
+    }
+  >
+
+  export interface LandsDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one Lands that matches the filter.
+     * @param {LandsFindUniqueArgs} args - Arguments to find a Lands
+     * @example
+     * // Get one Lands
+     * const lands = await prisma.lands.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends LandsFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, LandsFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Lands'> extends True ? CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>> : CheckSelect<T, Prisma__LandsClient<Lands | null, null>, Prisma__LandsClient<LandsGetPayload<T> | null, null>>
+
+    /**
+     * Find the first Lands that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsFindFirstArgs} args - Arguments to find a Lands
+     * @example
+     * // Get one Lands
+     * const lands = await prisma.lands.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends LandsFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, LandsFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Lands'> extends True ? CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>> : CheckSelect<T, Prisma__LandsClient<Lands | null, null>, Prisma__LandsClient<LandsGetPayload<T> | null, null>>
+
+    /**
+     * Find zero or more Lands that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Lands
+     * const lands = await prisma.lands.findMany()
+     * 
+     * // Get first 10 Lands
+     * const lands = await prisma.lands.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const landsWithIdOnly = await prisma.lands.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends LandsFindManyArgs>(
+      args?: SelectSubset<T, LandsFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<Lands>>, PrismaPromise<Array<LandsGetPayload<T>>>>
+
+    /**
+     * Create a Lands.
+     * @param {LandsCreateArgs} args - Arguments to create a Lands.
+     * @example
+     * // Create one Lands
+     * const Lands = await prisma.lands.create({
+     *   data: {
+     *     // ... data to create a Lands
+     *   }
+     * })
+     * 
+    **/
+    create<T extends LandsCreateArgs>(
+      args: SelectSubset<T, LandsCreateArgs>
+    ): CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>>
+
+    /**
+     * Create many Lands.
+     *     @param {LandsCreateManyArgs} args - Arguments to create many Lands.
+     *     @example
+     *     // Create many Lands
+     *     const lands = await prisma.lands.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends LandsCreateManyArgs>(
+      args?: SelectSubset<T, LandsCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Lands.
+     * @param {LandsDeleteArgs} args - Arguments to delete one Lands.
+     * @example
+     * // Delete one Lands
+     * const Lands = await prisma.lands.delete({
+     *   where: {
+     *     // ... filter to delete one Lands
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends LandsDeleteArgs>(
+      args: SelectSubset<T, LandsDeleteArgs>
+    ): CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>>
+
+    /**
+     * Update one Lands.
+     * @param {LandsUpdateArgs} args - Arguments to update one Lands.
+     * @example
+     * // Update one Lands
+     * const lands = await prisma.lands.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends LandsUpdateArgs>(
+      args: SelectSubset<T, LandsUpdateArgs>
+    ): CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>>
+
+    /**
+     * Delete zero or more Lands.
+     * @param {LandsDeleteManyArgs} args - Arguments to filter Lands to delete.
+     * @example
+     * // Delete a few Lands
+     * const { count } = await prisma.lands.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends LandsDeleteManyArgs>(
+      args?: SelectSubset<T, LandsDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Lands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Lands
+     * const lands = await prisma.lands.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends LandsUpdateManyArgs>(
+      args: SelectSubset<T, LandsUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Lands.
+     * @param {LandsUpsertArgs} args - Arguments to update or create a Lands.
+     * @example
+     * // Update or create a Lands
+     * const lands = await prisma.lands.upsert({
+     *   create: {
+     *     // ... data to create a Lands
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Lands we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends LandsUpsertArgs>(
+      args: SelectSubset<T, LandsUpsertArgs>
+    ): CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>>
+
+    /**
+     * Find one Lands that matches the filter or throw
+     * `NotFoundError` if no matches were found.
+     * @param {LandsFindUniqueOrThrowArgs} args - Arguments to find a Lands
+     * @example
+     * // Get one Lands
+     * const lands = await prisma.lands.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends LandsFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, LandsFindUniqueOrThrowArgs>
+    ): CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>>
+
+    /**
+     * Find the first Lands that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsFindFirstOrThrowArgs} args - Arguments to find a Lands
+     * @example
+     * // Get one Lands
+     * const lands = await prisma.lands.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends LandsFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, LandsFindFirstOrThrowArgs>
+    ): CheckSelect<T, Prisma__LandsClient<Lands>, Prisma__LandsClient<LandsGetPayload<T>>>
+
+    /**
+     * Count the number of Lands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsCountArgs} args - Arguments to filter Lands to count.
+     * @example
+     * // Count the number of Lands
+     * const count = await prisma.lands.count({
+     *   where: {
+     *     // ... the filter for the Lands we want to count
+     *   }
+     * })
+    **/
+    count<T extends LandsCountArgs>(
+      args?: Subset<T, LandsCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LandsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Lands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LandsAggregateArgs>(args: Subset<T, LandsAggregateArgs>): PrismaPromise<GetLandsAggregateType<T>>
+
+    /**
+     * Group by Lands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LandsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LandsGroupByArgs['orderBy'] }
+        : { orderBy?: LandsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LandsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLandsGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Lands.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__LandsClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    Accounts<T extends AccountsArgs = {}>(args?: Subset<T, AccountsArgs>): CheckSelect<T, Prisma__AccountsClient<Accounts | Null>, Prisma__AccountsClient<AccountsGetPayload<T> | Null>>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Lands base type for findUnique actions
+   */
+  export type LandsFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * Filter, which Lands to fetch.
+     * 
+    **/
+    where: LandsWhereUniqueInput
+  }
+
+  /**
+   * Lands: findUnique
+   */
+  export interface LandsFindUniqueArgs extends LandsFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Lands base type for findFirst actions
+   */
+  export type LandsFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * Filter, which Lands to fetch.
+     * 
+    **/
+    where?: LandsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lands to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<LandsOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Lands.
+     * 
+    **/
+    cursor?: LandsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lands from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lands.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Lands.
+     * 
+    **/
+    distinct?: Enumerable<LandsScalarFieldEnum>
+  }
+
+  /**
+   * Lands: findFirst
+   */
+  export interface LandsFindFirstArgs extends LandsFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Lands findMany
+   */
+  export type LandsFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * Filter, which Lands to fetch.
+     * 
+    **/
+    where?: LandsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lands to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<LandsOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Lands.
+     * 
+    **/
+    cursor?: LandsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lands from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lands.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<LandsScalarFieldEnum>
+  }
+
+
+  /**
+   * Lands create
+   */
+  export type LandsCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * The data needed to create a Lands.
+     * 
+    **/
+    data: XOR<LandsCreateInput, LandsUncheckedCreateInput>
+  }
+
+
+  /**
+   * Lands createMany
+   */
+  export type LandsCreateManyArgs = {
+    /**
+     * The data used to create many Lands.
+     * 
+    **/
+    data: Enumerable<LandsCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Lands update
+   */
+  export type LandsUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * The data needed to update a Lands.
+     * 
+    **/
+    data: XOR<LandsUpdateInput, LandsUncheckedUpdateInput>
+    /**
+     * Choose, which Lands to update.
+     * 
+    **/
+    where: LandsWhereUniqueInput
+  }
+
+
+  /**
+   * Lands updateMany
+   */
+  export type LandsUpdateManyArgs = {
+    /**
+     * The data used to update Lands.
+     * 
+    **/
+    data: XOR<LandsUpdateManyMutationInput, LandsUncheckedUpdateManyInput>
+    /**
+     * Filter which Lands to update
+     * 
+    **/
+    where?: LandsWhereInput
+  }
+
+
+  /**
+   * Lands upsert
+   */
+  export type LandsUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * The filter to search for the Lands to update in case it exists.
+     * 
+    **/
+    where: LandsWhereUniqueInput
+    /**
+     * In case the Lands found by the `where` argument doesn't exist, create a new Lands with this data.
+     * 
+    **/
+    create: XOR<LandsCreateInput, LandsUncheckedCreateInput>
+    /**
+     * In case the Lands was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<LandsUpdateInput, LandsUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Lands delete
+   */
+  export type LandsDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
+    /**
+     * Filter which Lands to delete.
+     * 
+    **/
+    where: LandsWhereUniqueInput
+  }
+
+
+  /**
+   * Lands deleteMany
+   */
+  export type LandsDeleteManyArgs = {
+    /**
+     * Filter which Lands to delete
+     * 
+    **/
+    where?: LandsWhereInput
+  }
+
+
+  /**
+   * Lands: findUniqueOrThrow
+   */
+  export type LandsFindUniqueOrThrowArgs = LandsFindUniqueArgsBase
+      
+
+  /**
+   * Lands: findFirstOrThrow
+   */
+  export type LandsFindFirstOrThrowArgs = LandsFindFirstArgsBase
+      
+
+  /**
+   * Lands without action
+   */
+  export type LandsArgs = {
+    /**
+     * Select specific fields to fetch from the Lands
+     * 
+    **/
+    select?: LandsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: LandsInclude | null
   }
 
 
@@ -21339,6 +22488,935 @@ export namespace Prisma {
 
 
   /**
+   * Model Services
+   */
+
+
+  export type AggregateServices = {
+    _count: ServicesCountAggregateOutputType | null
+    _min: ServicesMinAggregateOutputType | null
+    _max: ServicesMaxAggregateOutputType | null
+  }
+
+  export type ServicesMinAggregateOutputType = {
+    key: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServicesMaxAggregateOutputType = {
+    key: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServicesCountAggregateOutputType = {
+    key: number
+    description: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ServicesMinAggregateInputType = {
+    key?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServicesMaxAggregateInputType = {
+    key?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServicesCountAggregateInputType = {
+    key?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ServicesAggregateArgs = {
+    /**
+     * Filter which Services to aggregate.
+     * 
+    **/
+    where?: ServicesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<ServicesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: ServicesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Services
+    **/
+    _count?: true | ServicesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ServicesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ServicesMaxAggregateInputType
+  }
+
+  export type GetServicesAggregateType<T extends ServicesAggregateArgs> = {
+        [P in keyof T & keyof AggregateServices]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateServices[P]>
+      : GetScalarType<T[P], AggregateServices[P]>
+  }
+
+
+
+
+  export type ServicesGroupByArgs = {
+    where?: ServicesWhereInput
+    orderBy?: Enumerable<ServicesOrderByWithAggregationInput>
+    by: Array<ServicesScalarFieldEnum>
+    having?: ServicesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ServicesCountAggregateInputType | true
+    _min?: ServicesMinAggregateInputType
+    _max?: ServicesMaxAggregateInputType
+  }
+
+
+  export type ServicesGroupByOutputType = {
+    key: string
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ServicesCountAggregateOutputType | null
+    _min: ServicesMinAggregateOutputType | null
+    _max: ServicesMaxAggregateOutputType | null
+  }
+
+  type GetServicesGroupByPayload<T extends ServicesGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<ServicesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ServicesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ServicesGroupByOutputType[P]>
+            : GetScalarType<T[P], ServicesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ServicesSelect = {
+    key?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Accounts?: boolean | AccountsFindManyArgs
+    _count?: boolean | ServicesCountOutputTypeArgs
+  }
+
+  export type ServicesInclude = {
+    Accounts?: boolean | AccountsFindManyArgs
+    _count?: boolean | ServicesCountOutputTypeArgs
+  }
+
+  export type ServicesGetPayload<
+    S extends boolean | null | undefined | ServicesArgs,
+    U = keyof S
+      > = S extends true
+        ? Services
+    : S extends undefined
+    ? never
+    : S extends ServicesArgs | ServicesFindManyArgs
+    ?'include' extends U
+    ? Services  & {
+    [P in TrueKeys<S['include']>]:
+        P extends 'Accounts' ? Array < AccountsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends '_count' ? ServicesCountOutputTypeGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
+  } 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+        P extends 'Accounts' ? Array < AccountsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends '_count' ? ServicesCountOutputTypeGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof Services ? Services[P] : never
+  } 
+    : Services
+  : Services
+
+
+  type ServicesCountArgs = Merge<
+    Omit<ServicesFindManyArgs, 'select' | 'include'> & {
+      select?: ServicesCountAggregateInputType | true
+    }
+  >
+
+  export interface ServicesDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one Services that matches the filter.
+     * @param {ServicesFindUniqueArgs} args - Arguments to find a Services
+     * @example
+     * // Get one Services
+     * const services = await prisma.services.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends ServicesFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, ServicesFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Services'> extends True ? CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>> : CheckSelect<T, Prisma__ServicesClient<Services | null, null>, Prisma__ServicesClient<ServicesGetPayload<T> | null, null>>
+
+    /**
+     * Find the first Services that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesFindFirstArgs} args - Arguments to find a Services
+     * @example
+     * // Get one Services
+     * const services = await prisma.services.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends ServicesFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, ServicesFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Services'> extends True ? CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>> : CheckSelect<T, Prisma__ServicesClient<Services | null, null>, Prisma__ServicesClient<ServicesGetPayload<T> | null, null>>
+
+    /**
+     * Find zero or more Services that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Services
+     * const services = await prisma.services.findMany()
+     * 
+     * // Get first 10 Services
+     * const services = await prisma.services.findMany({ take: 10 })
+     * 
+     * // Only select the `key`
+     * const servicesWithKeyOnly = await prisma.services.findMany({ select: { key: true } })
+     * 
+    **/
+    findMany<T extends ServicesFindManyArgs>(
+      args?: SelectSubset<T, ServicesFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<Services>>, PrismaPromise<Array<ServicesGetPayload<T>>>>
+
+    /**
+     * Create a Services.
+     * @param {ServicesCreateArgs} args - Arguments to create a Services.
+     * @example
+     * // Create one Services
+     * const Services = await prisma.services.create({
+     *   data: {
+     *     // ... data to create a Services
+     *   }
+     * })
+     * 
+    **/
+    create<T extends ServicesCreateArgs>(
+      args: SelectSubset<T, ServicesCreateArgs>
+    ): CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>>
+
+    /**
+     * Create many Services.
+     *     @param {ServicesCreateManyArgs} args - Arguments to create many Services.
+     *     @example
+     *     // Create many Services
+     *     const services = await prisma.services.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends ServicesCreateManyArgs>(
+      args?: SelectSubset<T, ServicesCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Services.
+     * @param {ServicesDeleteArgs} args - Arguments to delete one Services.
+     * @example
+     * // Delete one Services
+     * const Services = await prisma.services.delete({
+     *   where: {
+     *     // ... filter to delete one Services
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends ServicesDeleteArgs>(
+      args: SelectSubset<T, ServicesDeleteArgs>
+    ): CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>>
+
+    /**
+     * Update one Services.
+     * @param {ServicesUpdateArgs} args - Arguments to update one Services.
+     * @example
+     * // Update one Services
+     * const services = await prisma.services.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends ServicesUpdateArgs>(
+      args: SelectSubset<T, ServicesUpdateArgs>
+    ): CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>>
+
+    /**
+     * Delete zero or more Services.
+     * @param {ServicesDeleteManyArgs} args - Arguments to filter Services to delete.
+     * @example
+     * // Delete a few Services
+     * const { count } = await prisma.services.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends ServicesDeleteManyArgs>(
+      args?: SelectSubset<T, ServicesDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Services.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Services
+     * const services = await prisma.services.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends ServicesUpdateManyArgs>(
+      args: SelectSubset<T, ServicesUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Services.
+     * @param {ServicesUpsertArgs} args - Arguments to update or create a Services.
+     * @example
+     * // Update or create a Services
+     * const services = await prisma.services.upsert({
+     *   create: {
+     *     // ... data to create a Services
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Services we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends ServicesUpsertArgs>(
+      args: SelectSubset<T, ServicesUpsertArgs>
+    ): CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>>
+
+    /**
+     * Find one Services that matches the filter or throw
+     * `NotFoundError` if no matches were found.
+     * @param {ServicesFindUniqueOrThrowArgs} args - Arguments to find a Services
+     * @example
+     * // Get one Services
+     * const services = await prisma.services.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends ServicesFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, ServicesFindUniqueOrThrowArgs>
+    ): CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>>
+
+    /**
+     * Find the first Services that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesFindFirstOrThrowArgs} args - Arguments to find a Services
+     * @example
+     * // Get one Services
+     * const services = await prisma.services.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends ServicesFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ServicesFindFirstOrThrowArgs>
+    ): CheckSelect<T, Prisma__ServicesClient<Services>, Prisma__ServicesClient<ServicesGetPayload<T>>>
+
+    /**
+     * Count the number of Services.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesCountArgs} args - Arguments to filter Services to count.
+     * @example
+     * // Count the number of Services
+     * const count = await prisma.services.count({
+     *   where: {
+     *     // ... the filter for the Services we want to count
+     *   }
+     * })
+    **/
+    count<T extends ServicesCountArgs>(
+      args?: Subset<T, ServicesCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ServicesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Services.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ServicesAggregateArgs>(args: Subset<T, ServicesAggregateArgs>): PrismaPromise<GetServicesAggregateType<T>>
+
+    /**
+     * Group by Services.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServicesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ServicesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ServicesGroupByArgs['orderBy'] }
+        : { orderBy?: ServicesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ServicesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetServicesGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Services.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__ServicesClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    Accounts<T extends AccountsFindManyArgs = {}>(args?: Subset<T, AccountsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Accounts>| Null>, PrismaPromise<Array<AccountsGetPayload<T>>| Null>>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Services base type for findUnique actions
+   */
+  export type ServicesFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * Filter, which Services to fetch.
+     * 
+    **/
+    where: ServicesWhereUniqueInput
+  }
+
+  /**
+   * Services: findUnique
+   */
+  export interface ServicesFindUniqueArgs extends ServicesFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Services base type for findFirst actions
+   */
+  export type ServicesFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * Filter, which Services to fetch.
+     * 
+    **/
+    where?: ServicesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<ServicesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Services.
+     * 
+    **/
+    cursor?: ServicesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Services.
+     * 
+    **/
+    distinct?: Enumerable<ServicesScalarFieldEnum>
+  }
+
+  /**
+   * Services: findFirst
+   */
+  export interface ServicesFindFirstArgs extends ServicesFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Services findMany
+   */
+  export type ServicesFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * Filter, which Services to fetch.
+     * 
+    **/
+    where?: ServicesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<ServicesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Services.
+     * 
+    **/
+    cursor?: ServicesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<ServicesScalarFieldEnum>
+  }
+
+
+  /**
+   * Services create
+   */
+  export type ServicesCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * The data needed to create a Services.
+     * 
+    **/
+    data: XOR<ServicesCreateInput, ServicesUncheckedCreateInput>
+  }
+
+
+  /**
+   * Services createMany
+   */
+  export type ServicesCreateManyArgs = {
+    /**
+     * The data used to create many Services.
+     * 
+    **/
+    data: Enumerable<ServicesCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Services update
+   */
+  export type ServicesUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * The data needed to update a Services.
+     * 
+    **/
+    data: XOR<ServicesUpdateInput, ServicesUncheckedUpdateInput>
+    /**
+     * Choose, which Services to update.
+     * 
+    **/
+    where: ServicesWhereUniqueInput
+  }
+
+
+  /**
+   * Services updateMany
+   */
+  export type ServicesUpdateManyArgs = {
+    /**
+     * The data used to update Services.
+     * 
+    **/
+    data: XOR<ServicesUpdateManyMutationInput, ServicesUncheckedUpdateManyInput>
+    /**
+     * Filter which Services to update
+     * 
+    **/
+    where?: ServicesWhereInput
+  }
+
+
+  /**
+   * Services upsert
+   */
+  export type ServicesUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * The filter to search for the Services to update in case it exists.
+     * 
+    **/
+    where: ServicesWhereUniqueInput
+    /**
+     * In case the Services found by the `where` argument doesn't exist, create a new Services with this data.
+     * 
+    **/
+    create: XOR<ServicesCreateInput, ServicesUncheckedCreateInput>
+    /**
+     * In case the Services was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<ServicesUpdateInput, ServicesUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Services delete
+   */
+  export type ServicesDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+    /**
+     * Filter which Services to delete.
+     * 
+    **/
+    where: ServicesWhereUniqueInput
+  }
+
+
+  /**
+   * Services deleteMany
+   */
+  export type ServicesDeleteManyArgs = {
+    /**
+     * Filter which Services to delete
+     * 
+    **/
+    where?: ServicesWhereInput
+  }
+
+
+  /**
+   * Services: findUniqueOrThrow
+   */
+  export type ServicesFindUniqueOrThrowArgs = ServicesFindUniqueArgsBase
+      
+
+  /**
+   * Services: findFirstOrThrow
+   */
+  export type ServicesFindFirstOrThrowArgs = ServicesFindFirstArgsBase
+      
+
+  /**
+   * Services without action
+   */
+  export type ServicesArgs = {
+    /**
+     * Select specific fields to fetch from the Services
+     * 
+    **/
+    select?: ServicesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ServicesInclude | null
+  }
+
+
+
+  /**
    * Model Statistics
    */
 
@@ -29621,7 +31699,8 @@ export namespace Prisma {
     password: 'password',
     name: 'name',
     isVerify: 'isVerify',
-    isApprove: 'isApprove'
+    isApprove: 'isApprove',
+    ServiceKey: 'ServiceKey'
   };
 
   export type AccountsScalarFieldEnum = (typeof AccountsScalarFieldEnum)[keyof typeof AccountsScalarFieldEnum]
@@ -29760,6 +31839,25 @@ export namespace Prisma {
   };
 
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const LandsScalarFieldEnum: {
+    id: 'id',
+    AccountId: 'AccountId',
+    is_active: 'is_active',
+    type: 'type',
+    villageName: 'villageName',
+    status: 'status',
+    geometry: 'geometry',
+    x: 'x',
+    y: 'y',
+    area: 'area',
+    extra: 'extra',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LandsScalarFieldEnum = (typeof LandsScalarFieldEnum)[keyof typeof LandsScalarFieldEnum]
 
 
   export const NoticesScalarFieldEnum: {
@@ -29951,6 +32049,17 @@ export namespace Prisma {
   export type SequelizeMetaScalarFieldEnum = (typeof SequelizeMetaScalarFieldEnum)[keyof typeof SequelizeMetaScalarFieldEnum]
 
 
+  export const ServicesScalarFieldEnum: {
+    key: 'key',
+    description: 'description',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ServicesScalarFieldEnum = (typeof ServicesScalarFieldEnum)[keyof typeof ServicesScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -30125,11 +32234,14 @@ export namespace Prisma {
     name?: StringNullableFilter | string | null
     isVerify?: BoolNullableFilter | boolean | null
     isApprove?: BoolNullableFilter | boolean | null
+    ServiceKey?: StringNullableFilter | string | null
+    Services?: XOR<ServicesRelationFilter, ServicesWhereInput> | null
     Alerts?: AlertsListRelationFilter
     Careers?: CareersListRelationFilter
     CustomerTaskDetails?: CustomerTaskDetailsListRelationFilter
     Customers?: CustomersListRelationFilter
     Discounts?: DiscountsListRelationFilter
+    Lands?: LandsListRelationFilter
     Notifications?: NotificationsListRelationFilter
     OrderHistories?: OrderHistoriesListRelationFilter
     Orders?: OrdersListRelationFilter
@@ -30161,11 +32273,14 @@ export namespace Prisma {
     name?: SortOrder
     isVerify?: SortOrder
     isApprove?: SortOrder
+    ServiceKey?: SortOrder
+    Services?: ServicesOrderByWithRelationInput
     Alerts?: AlertsOrderByRelationAggregateInput
     Careers?: CareersOrderByRelationAggregateInput
     CustomerTaskDetails?: CustomerTaskDetailsOrderByRelationAggregateInput
     Customers?: CustomersOrderByRelationAggregateInput
     Discounts?: DiscountsOrderByRelationAggregateInput
+    Lands?: LandsOrderByRelationAggregateInput
     Notifications?: NotificationsOrderByRelationAggregateInput
     OrderHistories?: OrderHistoriesOrderByRelationAggregateInput
     Orders?: OrdersOrderByRelationAggregateInput
@@ -30201,6 +32316,7 @@ export namespace Prisma {
     name?: SortOrder
     isVerify?: SortOrder
     isApprove?: SortOrder
+    ServiceKey?: SortOrder
     _count?: AccountsCountOrderByAggregateInput
     _avg?: AccountsAvgOrderByAggregateInput
     _max?: AccountsMaxOrderByAggregateInput
@@ -30224,6 +32340,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter | string | null
     isVerify?: BoolNullableWithAggregatesFilter | boolean | null
     isApprove?: BoolNullableWithAggregatesFilter | boolean | null
+    ServiceKey?: StringNullableWithAggregatesFilter | string | null
   }
 
   export type AlertsWhereInput = {
@@ -30774,6 +32891,87 @@ export namespace Prisma {
     y?: StringNullableWithAggregatesFilter | string | null
     pnu?: StringNullableWithAggregatesFilter | string | null
     area?: DecimalNullableWithAggregatesFilter | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeWithAggregatesFilter | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type LandsWhereInput = {
+    AND?: Enumerable<LandsWhereInput>
+    OR?: Enumerable<LandsWhereInput>
+    NOT?: Enumerable<LandsWhereInput>
+    id?: BigIntFilter | bigint | number
+    AccountId?: IntFilter | number
+    is_active?: BoolNullableFilter | boolean | null
+    type?: StringNullableFilter | string | null
+    villageName?: StringNullableFilter | string | null
+    status?: StringNullableFilter | string | null
+    geometry?: JsonNullableFilter
+    x?: StringNullableFilter | string | null
+    y?: StringNullableFilter | string | null
+    area?: DecimalNullableFilter | Decimal | DecimalJsLike | number | string | null
+    extra?: JsonNullableFilter
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+    Accounts?: XOR<AccountsRelationFilter, AccountsWhereInput>
+  }
+
+  export type LandsOrderByWithRelationInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    is_active?: SortOrder
+    type?: SortOrder
+    villageName?: SortOrder
+    status?: SortOrder
+    geometry?: SortOrder
+    x?: SortOrder
+    y?: SortOrder
+    area?: SortOrder
+    extra?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    Accounts?: AccountsOrderByWithRelationInput
+  }
+
+  export type LandsWhereUniqueInput = {
+    id?: bigint | number
+  }
+
+  export type LandsOrderByWithAggregationInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    is_active?: SortOrder
+    type?: SortOrder
+    villageName?: SortOrder
+    status?: SortOrder
+    geometry?: SortOrder
+    x?: SortOrder
+    y?: SortOrder
+    area?: SortOrder
+    extra?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LandsCountOrderByAggregateInput
+    _avg?: LandsAvgOrderByAggregateInput
+    _max?: LandsMaxOrderByAggregateInput
+    _min?: LandsMinOrderByAggregateInput
+    _sum?: LandsSumOrderByAggregateInput
+  }
+
+  export type LandsScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<LandsScalarWhereWithAggregatesInput>
+    OR?: Enumerable<LandsScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<LandsScalarWhereWithAggregatesInput>
+    id?: BigIntWithAggregatesFilter | bigint | number
+    AccountId?: IntWithAggregatesFilter | number
+    is_active?: BoolNullableWithAggregatesFilter | boolean | null
+    type?: StringNullableWithAggregatesFilter | string | null
+    villageName?: StringNullableWithAggregatesFilter | string | null
+    status?: StringNullableWithAggregatesFilter | string | null
+    geometry?: JsonNullableWithAggregatesFilter
+    x?: StringNullableWithAggregatesFilter | string | null
+    y?: StringNullableWithAggregatesFilter | string | null
+    area?: DecimalNullableWithAggregatesFilter | Decimal | DecimalJsLike | number | string | null
+    extra?: JsonNullableWithAggregatesFilter
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -31535,6 +33733,53 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter | string
   }
 
+  export type ServicesWhereInput = {
+    AND?: Enumerable<ServicesWhereInput>
+    OR?: Enumerable<ServicesWhereInput>
+    NOT?: Enumerable<ServicesWhereInput>
+    key?: StringFilter | string
+    description?: StringNullableFilter | string | null
+    isActive?: BoolNullableFilter | boolean | null
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+    Accounts?: AccountsListRelationFilter
+  }
+
+  export type ServicesOrderByWithRelationInput = {
+    key?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    Accounts?: AccountsOrderByRelationAggregateInput
+  }
+
+  export type ServicesWhereUniqueInput = {
+    key?: string
+  }
+
+  export type ServicesOrderByWithAggregationInput = {
+    key?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ServicesCountOrderByAggregateInput
+    _max?: ServicesMaxOrderByAggregateInput
+    _min?: ServicesMinOrderByAggregateInput
+  }
+
+  export type ServicesScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<ServicesScalarWhereWithAggregatesInput>
+    OR?: Enumerable<ServicesScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<ServicesScalarWhereWithAggregatesInput>
+    key?: StringWithAggregatesFilter | string
+    description?: StringNullableWithAggregatesFilter | string | null
+    isActive?: BoolNullableWithAggregatesFilter | boolean | null
+    createdAt?: DateTimeWithAggregatesFilter | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
   export type StatisticsWhereInput = {
     AND?: Enumerable<StatisticsWhereInput>
     OR?: Enumerable<StatisticsWhereInput>
@@ -32163,11 +34408,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -32199,11 +34446,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -32234,11 +34483,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -32270,11 +34521,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -32306,6 +34559,7 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
   }
 
   export type AccountsUpdateManyMutationInput = {
@@ -32335,6 +34589,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AlertsCreateInput = {
@@ -33028,6 +35283,117 @@ export namespace Prisma {
     y?: NullableStringFieldUpdateOperationsInput | string | null
     pnu?: NullableStringFieldUpdateOperationsInput | string | null
     area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandsCreateInput = {
+    id?: bigint | number
+    is_active?: boolean | null
+    type?: string | null
+    villageName?: string | null
+    status?: string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: string | null
+    y?: string | null
+    area?: Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt: Date | string
+    updatedAt: Date | string
+    Accounts: AccountsCreateNestedOneWithoutLandsInput
+  }
+
+  export type LandsUncheckedCreateInput = {
+    id?: bigint | number
+    AccountId: number
+    is_active?: boolean | null
+    type?: string | null
+    villageName?: string | null
+    status?: string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: string | null
+    y?: string | null
+    area?: Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type LandsUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Accounts?: AccountsUpdateOneRequiredWithoutLandsNestedInput
+  }
+
+  export type LandsUncheckedUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    AccountId?: IntFieldUpdateOperationsInput | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandsCreateManyInput = {
+    id?: bigint | number
+    AccountId: number
+    is_active?: boolean | null
+    type?: string | null
+    villageName?: string | null
+    status?: string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: string | null
+    y?: string | null
+    area?: Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type LandsUpdateManyMutationInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandsUncheckedUpdateManyInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    AccountId?: IntFieldUpdateOperationsInput | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34021,6 +36387,66 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ServicesCreateInput = {
+    key: string
+    description?: string | null
+    isActive?: boolean | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    Accounts?: AccountsCreateNestedManyWithoutServicesInput
+  }
+
+  export type ServicesUncheckedCreateInput = {
+    key: string
+    description?: string | null
+    isActive?: boolean | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    Accounts?: AccountsUncheckedCreateNestedManyWithoutServicesInput
+  }
+
+  export type ServicesUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Accounts?: AccountsUpdateManyWithoutServicesNestedInput
+  }
+
+  export type ServicesUncheckedUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Accounts?: AccountsUncheckedUpdateManyWithoutServicesNestedInput
+  }
+
+  export type ServicesCreateManyInput = {
+    key: string
+    description?: string | null
+    isActive?: boolean | null
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type ServicesUpdateManyMutationInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServicesUncheckedUpdateManyInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StatisticsCreateInput = {
     dailyWorkload?: Decimal | DecimalJsLike | number | string | null
     completedByOwner?: Decimal | DecimalJsLike | number | string | null
@@ -34871,6 +37297,11 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter | boolean | null
   }
 
+  export type ServicesRelationFilter = {
+    is?: ServicesWhereInput | null
+    isNot?: ServicesWhereInput | null
+  }
+
   export type AlertsListRelationFilter = {
     every?: AlertsWhereInput
     some?: AlertsWhereInput
@@ -34899,6 +37330,12 @@ export namespace Prisma {
     every?: DiscountsWhereInput
     some?: DiscountsWhereInput
     none?: DiscountsWhereInput
+  }
+
+  export type LandsListRelationFilter = {
+    every?: LandsWhereInput
+    some?: LandsWhereInput
+    none?: LandsWhereInput
   }
 
   export type NotificationsListRelationFilter = {
@@ -35011,6 +37448,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type LandsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type NotificationsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -35084,6 +37525,7 @@ export namespace Prisma {
     name?: SortOrder
     isVerify?: SortOrder
     isApprove?: SortOrder
+    ServiceKey?: SortOrder
   }
 
   export type AccountsAvgOrderByAggregateInput = {
@@ -35103,6 +37545,7 @@ export namespace Prisma {
     name?: SortOrder
     isVerify?: SortOrder
     isApprove?: SortOrder
+    ServiceKey?: SortOrder
   }
 
   export type AccountsMinOrderByAggregateInput = {
@@ -35117,6 +37560,7 @@ export namespace Prisma {
     name?: SortOrder
     isVerify?: SortOrder
     isApprove?: SortOrder
+    ServiceKey?: SortOrder
   }
 
   export type AccountsSumOrderByAggregateInput = {
@@ -35796,6 +38240,62 @@ export namespace Prisma {
     area?: SortOrder
   }
 
+  export type LandsCountOrderByAggregateInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    is_active?: SortOrder
+    type?: SortOrder
+    villageName?: SortOrder
+    status?: SortOrder
+    geometry?: SortOrder
+    x?: SortOrder
+    y?: SortOrder
+    area?: SortOrder
+    extra?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandsAvgOrderByAggregateInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    area?: SortOrder
+  }
+
+  export type LandsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    is_active?: SortOrder
+    type?: SortOrder
+    villageName?: SortOrder
+    status?: SortOrder
+    x?: SortOrder
+    y?: SortOrder
+    area?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandsMinOrderByAggregateInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    is_active?: SortOrder
+    type?: SortOrder
+    villageName?: SortOrder
+    status?: SortOrder
+    x?: SortOrder
+    y?: SortOrder
+    area?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandsSumOrderByAggregateInput = {
+    id?: SortOrder
+    AccountId?: SortOrder
+    area?: SortOrder
+  }
+
   export type NoticesCountOrderByAggregateInput = {
     id?: SortOrder
     startDate?: SortOrder
@@ -36364,6 +38864,40 @@ export namespace Prisma {
     name?: SortOrder
   }
 
+  export type AccountsListRelationFilter = {
+    every?: AccountsWhereInput
+    some?: AccountsWhereInput
+    none?: AccountsWhereInput
+  }
+
+  export type AccountsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ServicesCountOrderByAggregateInput = {
+    key?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServicesMaxOrderByAggregateInput = {
+    key?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServicesMinOrderByAggregateInput = {
+    key?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type TeamsRelationFilter = {
     is?: TeamsWhereInput | null
     isNot?: TeamsWhereInput | null
@@ -36827,6 +39361,12 @@ export namespace Prisma {
     area?: SortOrder
   }
 
+  export type ServicesCreateNestedOneWithoutAccountsInput = {
+    create?: XOR<ServicesCreateWithoutAccountsInput, ServicesUncheckedCreateWithoutAccountsInput>
+    connectOrCreate?: ServicesCreateOrConnectWithoutAccountsInput
+    connect?: ServicesWhereUniqueInput
+  }
+
   export type AlertsCreateNestedManyWithoutAccountsInput = {
     create?: XOR<Enumerable<AlertsCreateWithoutAccountsInput>, Enumerable<AlertsUncheckedCreateWithoutAccountsInput>>
     connectOrCreate?: Enumerable<AlertsCreateOrConnectWithoutAccountsInput>
@@ -36860,6 +39400,13 @@ export namespace Prisma {
     connectOrCreate?: Enumerable<DiscountsCreateOrConnectWithoutAccountsInput>
     createMany?: DiscountsCreateManyAccountsInputEnvelope
     connect?: Enumerable<DiscountsWhereUniqueInput>
+  }
+
+  export type LandsCreateNestedManyWithoutAccountsInput = {
+    create?: XOR<Enumerable<LandsCreateWithoutAccountsInput>, Enumerable<LandsUncheckedCreateWithoutAccountsInput>>
+    connectOrCreate?: Enumerable<LandsCreateOrConnectWithoutAccountsInput>
+    createMany?: LandsCreateManyAccountsInputEnvelope
+    connect?: Enumerable<LandsWhereUniqueInput>
   }
 
   export type NotificationsCreateNestedManyWithoutAccountsInput = {
@@ -37009,6 +39556,13 @@ export namespace Prisma {
     connect?: Enumerable<DiscountsWhereUniqueInput>
   }
 
+  export type LandsUncheckedCreateNestedManyWithoutAccountsInput = {
+    create?: XOR<Enumerable<LandsCreateWithoutAccountsInput>, Enumerable<LandsUncheckedCreateWithoutAccountsInput>>
+    connectOrCreate?: Enumerable<LandsCreateOrConnectWithoutAccountsInput>
+    createMany?: LandsCreateManyAccountsInputEnvelope
+    connect?: Enumerable<LandsWhereUniqueInput>
+  }
+
   export type NotificationsUncheckedCreateNestedManyWithoutAccountsInput = {
     create?: XOR<Enumerable<NotificationsCreateWithoutAccountsInput>, Enumerable<NotificationsUncheckedCreateWithoutAccountsInput>>
     connectOrCreate?: Enumerable<NotificationsCreateOrConnectWithoutAccountsInput>
@@ -37141,6 +39695,16 @@ export namespace Prisma {
     set?: boolean | null
   }
 
+  export type ServicesUpdateOneWithoutAccountsNestedInput = {
+    create?: XOR<ServicesCreateWithoutAccountsInput, ServicesUncheckedCreateWithoutAccountsInput>
+    connectOrCreate?: ServicesCreateOrConnectWithoutAccountsInput
+    upsert?: ServicesUpsertWithoutAccountsInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: ServicesWhereUniqueInput
+    update?: XOR<ServicesUpdateWithoutAccountsInput, ServicesUncheckedUpdateWithoutAccountsInput>
+  }
+
   export type AlertsUpdateManyWithoutAccountsNestedInput = {
     create?: XOR<Enumerable<AlertsCreateWithoutAccountsInput>, Enumerable<AlertsUncheckedCreateWithoutAccountsInput>>
     connectOrCreate?: Enumerable<AlertsCreateOrConnectWithoutAccountsInput>
@@ -37209,6 +39773,20 @@ export namespace Prisma {
     update?: Enumerable<DiscountsUpdateWithWhereUniqueWithoutAccountsInput>
     updateMany?: Enumerable<DiscountsUpdateManyWithWhereWithoutAccountsInput>
     deleteMany?: Enumerable<DiscountsScalarWhereInput>
+  }
+
+  export type LandsUpdateManyWithoutAccountsNestedInput = {
+    create?: XOR<Enumerable<LandsCreateWithoutAccountsInput>, Enumerable<LandsUncheckedCreateWithoutAccountsInput>>
+    connectOrCreate?: Enumerable<LandsCreateOrConnectWithoutAccountsInput>
+    upsert?: Enumerable<LandsUpsertWithWhereUniqueWithoutAccountsInput>
+    createMany?: LandsCreateManyAccountsInputEnvelope
+    set?: Enumerable<LandsWhereUniqueInput>
+    disconnect?: Enumerable<LandsWhereUniqueInput>
+    delete?: Enumerable<LandsWhereUniqueInput>
+    connect?: Enumerable<LandsWhereUniqueInput>
+    update?: Enumerable<LandsUpdateWithWhereUniqueWithoutAccountsInput>
+    updateMany?: Enumerable<LandsUpdateManyWithWhereWithoutAccountsInput>
+    deleteMany?: Enumerable<LandsScalarWhereInput>
   }
 
   export type NotificationsUpdateManyWithoutAccountsNestedInput = {
@@ -37511,6 +40089,20 @@ export namespace Prisma {
     update?: Enumerable<DiscountsUpdateWithWhereUniqueWithoutAccountsInput>
     updateMany?: Enumerable<DiscountsUpdateManyWithWhereWithoutAccountsInput>
     deleteMany?: Enumerable<DiscountsScalarWhereInput>
+  }
+
+  export type LandsUncheckedUpdateManyWithoutAccountsNestedInput = {
+    create?: XOR<Enumerable<LandsCreateWithoutAccountsInput>, Enumerable<LandsUncheckedCreateWithoutAccountsInput>>
+    connectOrCreate?: Enumerable<LandsCreateOrConnectWithoutAccountsInput>
+    upsert?: Enumerable<LandsUpsertWithWhereUniqueWithoutAccountsInput>
+    createMany?: LandsCreateManyAccountsInputEnvelope
+    set?: Enumerable<LandsWhereUniqueInput>
+    disconnect?: Enumerable<LandsWhereUniqueInput>
+    delete?: Enumerable<LandsWhereUniqueInput>
+    connect?: Enumerable<LandsWhereUniqueInput>
+    update?: Enumerable<LandsUpdateWithWhereUniqueWithoutAccountsInput>
+    updateMany?: Enumerable<LandsUpdateManyWithWhereWithoutAccountsInput>
+    deleteMany?: Enumerable<LandsScalarWhereInput>
   }
 
   export type NotificationsUncheckedUpdateManyWithoutAccountsNestedInput = {
@@ -38006,6 +40598,20 @@ export namespace Prisma {
     update?: XOR<ProductsUpdateWithoutDiscountsInput, ProductsUncheckedUpdateWithoutDiscountsInput>
   }
 
+  export type AccountsCreateNestedOneWithoutLandsInput = {
+    create?: XOR<AccountsCreateWithoutLandsInput, AccountsUncheckedCreateWithoutLandsInput>
+    connectOrCreate?: AccountsCreateOrConnectWithoutLandsInput
+    connect?: AccountsWhereUniqueInput
+  }
+
+  export type AccountsUpdateOneRequiredWithoutLandsNestedInput = {
+    create?: XOR<AccountsCreateWithoutLandsInput, AccountsUncheckedCreateWithoutLandsInput>
+    connectOrCreate?: AccountsCreateOrConnectWithoutLandsInput
+    upsert?: AccountsUpsertWithoutLandsInput
+    connect?: AccountsWhereUniqueInput
+    update?: XOR<AccountsUpdateWithoutLandsInput, AccountsUncheckedUpdateWithoutLandsInput>
+  }
+
   export type AccountsCreateNestedOneWithoutNotificationsInput = {
     create?: XOR<AccountsCreateWithoutNotificationsInput, AccountsUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: AccountsCreateOrConnectWithoutNotificationsInput
@@ -38477,6 +41083,48 @@ export namespace Prisma {
     delete?: boolean
     connect?: TasksWhereUniqueInput
     update?: XOR<TasksUpdateWithoutReportsInput, TasksUncheckedUpdateWithoutReportsInput>
+  }
+
+  export type AccountsCreateNestedManyWithoutServicesInput = {
+    create?: XOR<Enumerable<AccountsCreateWithoutServicesInput>, Enumerable<AccountsUncheckedCreateWithoutServicesInput>>
+    connectOrCreate?: Enumerable<AccountsCreateOrConnectWithoutServicesInput>
+    createMany?: AccountsCreateManyServicesInputEnvelope
+    connect?: Enumerable<AccountsWhereUniqueInput>
+  }
+
+  export type AccountsUncheckedCreateNestedManyWithoutServicesInput = {
+    create?: XOR<Enumerable<AccountsCreateWithoutServicesInput>, Enumerable<AccountsUncheckedCreateWithoutServicesInput>>
+    connectOrCreate?: Enumerable<AccountsCreateOrConnectWithoutServicesInput>
+    createMany?: AccountsCreateManyServicesInputEnvelope
+    connect?: Enumerable<AccountsWhereUniqueInput>
+  }
+
+  export type AccountsUpdateManyWithoutServicesNestedInput = {
+    create?: XOR<Enumerable<AccountsCreateWithoutServicesInput>, Enumerable<AccountsUncheckedCreateWithoutServicesInput>>
+    connectOrCreate?: Enumerable<AccountsCreateOrConnectWithoutServicesInput>
+    upsert?: Enumerable<AccountsUpsertWithWhereUniqueWithoutServicesInput>
+    createMany?: AccountsCreateManyServicesInputEnvelope
+    set?: Enumerable<AccountsWhereUniqueInput>
+    disconnect?: Enumerable<AccountsWhereUniqueInput>
+    delete?: Enumerable<AccountsWhereUniqueInput>
+    connect?: Enumerable<AccountsWhereUniqueInput>
+    update?: Enumerable<AccountsUpdateWithWhereUniqueWithoutServicesInput>
+    updateMany?: Enumerable<AccountsUpdateManyWithWhereWithoutServicesInput>
+    deleteMany?: Enumerable<AccountsScalarWhereInput>
+  }
+
+  export type AccountsUncheckedUpdateManyWithoutServicesNestedInput = {
+    create?: XOR<Enumerable<AccountsCreateWithoutServicesInput>, Enumerable<AccountsUncheckedCreateWithoutServicesInput>>
+    connectOrCreate?: Enumerable<AccountsCreateOrConnectWithoutServicesInput>
+    upsert?: Enumerable<AccountsUpsertWithWhereUniqueWithoutServicesInput>
+    createMany?: AccountsCreateManyServicesInputEnvelope
+    set?: Enumerable<AccountsWhereUniqueInput>
+    disconnect?: Enumerable<AccountsWhereUniqueInput>
+    delete?: Enumerable<AccountsWhereUniqueInput>
+    connect?: Enumerable<AccountsWhereUniqueInput>
+    update?: Enumerable<AccountsUpdateWithWhereUniqueWithoutServicesInput>
+    updateMany?: Enumerable<AccountsUpdateManyWithWhereWithoutServicesInput>
+    deleteMany?: Enumerable<AccountsScalarWhereInput>
   }
 
   export type AccountsCreateNestedOneWithoutStatisticsInput = {
@@ -39433,6 +42081,27 @@ export namespace Prisma {
     _max?: NestedEnumenum_Permissions_keyFilter
   }
 
+  export type ServicesCreateWithoutAccountsInput = {
+    key: string
+    description?: string | null
+    isActive?: boolean | null
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type ServicesUncheckedCreateWithoutAccountsInput = {
+    key: string
+    description?: string | null
+    isActive?: boolean | null
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type ServicesCreateOrConnectWithoutAccountsInput = {
+    where: ServicesWhereUniqueInput
+    create: XOR<ServicesCreateWithoutAccountsInput, ServicesUncheckedCreateWithoutAccountsInput>
+  }
+
   export type AlertsCreateWithoutAccountsInput = {
     id?: bigint | number
     title?: string | null
@@ -39598,6 +42267,46 @@ export namespace Prisma {
 
   export type DiscountsCreateManyAccountsInputEnvelope = {
     data: Enumerable<DiscountsCreateManyAccountsInput>
+    skipDuplicates?: boolean
+  }
+
+  export type LandsCreateWithoutAccountsInput = {
+    id?: bigint | number
+    is_active?: boolean | null
+    type?: string | null
+    villageName?: string | null
+    status?: string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: string | null
+    y?: string | null
+    area?: Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type LandsUncheckedCreateWithoutAccountsInput = {
+    id?: bigint | number
+    is_active?: boolean | null
+    type?: string | null
+    villageName?: string | null
+    status?: string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: string | null
+    y?: string | null
+    area?: Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt: Date | string
+    updatedAt: Date | string
+  }
+
+  export type LandsCreateOrConnectWithoutAccountsInput = {
+    where: LandsWhereUniqueInput
+    create: XOR<LandsCreateWithoutAccountsInput, LandsUncheckedCreateWithoutAccountsInput>
+  }
+
+  export type LandsCreateManyAccountsInputEnvelope = {
+    data: Enumerable<LandsCreateManyAccountsInput>
     skipDuplicates?: boolean
   }
 
@@ -40217,6 +42926,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ServicesUpsertWithoutAccountsInput = {
+    update: XOR<ServicesUpdateWithoutAccountsInput, ServicesUncheckedUpdateWithoutAccountsInput>
+    create: XOR<ServicesCreateWithoutAccountsInput, ServicesUncheckedCreateWithoutAccountsInput>
+  }
+
+  export type ServicesUpdateWithoutAccountsInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServicesUncheckedUpdateWithoutAccountsInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AlertsUpsertWithWhereUniqueWithoutAccountsInput = {
     where: AlertsWhereUniqueInput
     update: XOR<AlertsUpdateWithoutAccountsInput, AlertsUncheckedUpdateWithoutAccountsInput>
@@ -40375,6 +43105,41 @@ export namespace Prisma {
     CouponId?: IntNullableFilter | number | null
     ProductId?: IntNullableFilter | number | null
     filters?: JsonNullableFilter
+  }
+
+  export type LandsUpsertWithWhereUniqueWithoutAccountsInput = {
+    where: LandsWhereUniqueInput
+    update: XOR<LandsUpdateWithoutAccountsInput, LandsUncheckedUpdateWithoutAccountsInput>
+    create: XOR<LandsCreateWithoutAccountsInput, LandsUncheckedCreateWithoutAccountsInput>
+  }
+
+  export type LandsUpdateWithWhereUniqueWithoutAccountsInput = {
+    where: LandsWhereUniqueInput
+    data: XOR<LandsUpdateWithoutAccountsInput, LandsUncheckedUpdateWithoutAccountsInput>
+  }
+
+  export type LandsUpdateManyWithWhereWithoutAccountsInput = {
+    where: LandsScalarWhereInput
+    data: XOR<LandsUpdateManyMutationInput, LandsUncheckedUpdateManyWithoutLandsInput>
+  }
+
+  export type LandsScalarWhereInput = {
+    AND?: Enumerable<LandsScalarWhereInput>
+    OR?: Enumerable<LandsScalarWhereInput>
+    NOT?: Enumerable<LandsScalarWhereInput>
+    id?: BigIntFilter | bigint | number
+    AccountId?: IntFilter | number
+    is_active?: BoolNullableFilter | boolean | null
+    type?: StringNullableFilter | string | null
+    villageName?: StringNullableFilter | string | null
+    status?: StringNullableFilter | string | null
+    geometry?: JsonNullableFilter
+    x?: StringNullableFilter | string | null
+    y?: StringNullableFilter | string | null
+    area?: DecimalNullableFilter | Decimal | DecimalJsLike | number | string | null
+    extra?: JsonNullableFilter
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
   }
 
   export type NotificationsUpsertWithWhereUniqueWithoutAccountsInput = {
@@ -40913,10 +43678,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -40948,10 +43715,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -40992,10 +43761,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -41027,10 +43798,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -41061,10 +43834,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -41096,10 +43871,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -41140,10 +43917,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -41175,10 +43954,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -41258,10 +44039,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -41293,10 +44076,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -41363,10 +44148,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -41398,10 +44185,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -41458,10 +44247,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -41493,10 +44284,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -41578,10 +44371,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -41613,10 +44408,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -41663,10 +44460,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -41698,10 +44497,12 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -41858,10 +44659,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -41893,10 +44696,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -42031,6 +44836,162 @@ export namespace Prisma {
     Orders?: OrdersUncheckedUpdateManyWithoutProductsNestedInput
   }
 
+  export type AccountsCreateWithoutLandsInput = {
+    phone?: string | null
+    verifyToken?: number | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: boolean | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    isVerify?: boolean | null
+    isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
+    Alerts?: AlertsCreateNestedManyWithoutAccountsInput
+    Careers?: CareersCreateNestedManyWithoutAccountsInput
+    CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
+    Customers?: CustomersCreateNestedManyWithoutAccountsInput
+    Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
+    OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
+    Orders?: OrdersCreateNestedManyWithoutAccountsInput
+    Permissions?: PermissionsCreateNestedManyWithoutAccountsInput
+    PostAccounts?: PostAccountsCreateNestedManyWithoutAccountsInput
+    Posts?: PostsCreateNestedManyWithoutAccountsInput
+    Reports?: ReportsCreateNestedManyWithoutAccountsInput
+    Statistics?: StatisticsCreateNestedManyWithoutAccountsInput
+    Subscribes?: SubscribesCreateNestedManyWithoutAccountsInput
+    TaskDetailResources?: TaskDetailResourcesCreateNestedManyWithoutAccountsInput
+    TaskDetails?: TaskDetailsCreateNestedManyWithoutAccountsInput
+    TaskGroups?: TaskGroupsCreateNestedManyWithoutAccountsInput
+    Tasks?: TasksCreateNestedManyWithoutAccountsInput
+    TeamAgents?: TeamAgentsCreateNestedManyWithoutAccountsInput
+    Teams_AccountsToTeams_AccountId?: TeamsCreateNestedManyWithoutAccounts_AccountsToTeams_AccountIdInput
+    Teams_AccountsToTeams_AgentId?: TeamsCreateNestedManyWithoutAccounts_AccountsToTeams_AgentIdInput
+  }
+
+  export type AccountsUncheckedCreateWithoutLandsInput = {
+    id?: number
+    phone?: string | null
+    verifyToken?: number | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: boolean | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    isVerify?: boolean | null
+    isApprove?: boolean | null
+    ServiceKey?: string | null
+    Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
+    Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
+    CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
+    Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
+    Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
+    OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
+    Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
+    Permissions?: PermissionsUncheckedCreateNestedManyWithoutAccountsInput
+    PostAccounts?: PostAccountsUncheckedCreateNestedManyWithoutAccountsInput
+    Posts?: PostsUncheckedCreateNestedManyWithoutAccountsInput
+    Reports?: ReportsUncheckedCreateNestedManyWithoutAccountsInput
+    Statistics?: StatisticsUncheckedCreateNestedManyWithoutAccountsInput
+    Subscribes?: SubscribesUncheckedCreateNestedManyWithoutAccountsInput
+    TaskDetailResources?: TaskDetailResourcesUncheckedCreateNestedManyWithoutAccountsInput
+    TaskDetails?: TaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
+    TaskGroups?: TaskGroupsUncheckedCreateNestedManyWithoutAccountsInput
+    Tasks?: TasksUncheckedCreateNestedManyWithoutAccountsInput
+    TeamAgents?: TeamAgentsUncheckedCreateNestedManyWithoutAccountsInput
+    Teams_AccountsToTeams_AccountId?: TeamsUncheckedCreateNestedManyWithoutAccounts_AccountsToTeams_AccountIdInput
+    Teams_AccountsToTeams_AgentId?: TeamsUncheckedCreateNestedManyWithoutAccounts_AccountsToTeams_AgentIdInput
+  }
+
+  export type AccountsCreateOrConnectWithoutLandsInput = {
+    where: AccountsWhereUniqueInput
+    create: XOR<AccountsCreateWithoutLandsInput, AccountsUncheckedCreateWithoutLandsInput>
+  }
+
+  export type AccountsUpsertWithoutLandsInput = {
+    update: XOR<AccountsUpdateWithoutLandsInput, AccountsUncheckedUpdateWithoutLandsInput>
+    create: XOR<AccountsCreateWithoutLandsInput, AccountsUncheckedCreateWithoutLandsInput>
+  }
+
+  export type AccountsUpdateWithoutLandsInput = {
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    verifyToken?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
+    Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
+    Careers?: CareersUpdateManyWithoutAccountsNestedInput
+    CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
+    Customers?: CustomersUpdateManyWithoutAccountsNestedInput
+    Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
+    OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
+    Orders?: OrdersUpdateManyWithoutAccountsNestedInput
+    Permissions?: PermissionsUpdateManyWithoutAccountsNestedInput
+    PostAccounts?: PostAccountsUpdateManyWithoutAccountsNestedInput
+    Posts?: PostsUpdateManyWithoutAccountsNestedInput
+    Reports?: ReportsUpdateManyWithoutAccountsNestedInput
+    Statistics?: StatisticsUpdateManyWithoutAccountsNestedInput
+    Subscribes?: SubscribesUpdateManyWithoutAccountsNestedInput
+    TaskDetailResources?: TaskDetailResourcesUpdateManyWithoutAccountsNestedInput
+    TaskDetails?: TaskDetailsUpdateManyWithoutAccountsNestedInput
+    TaskGroups?: TaskGroupsUpdateManyWithoutAccountsNestedInput
+    Tasks?: TasksUpdateManyWithoutAccountsNestedInput
+    TeamAgents?: TeamAgentsUpdateManyWithoutAccountsNestedInput
+    Teams_AccountsToTeams_AccountId?: TeamsUpdateManyWithoutAccounts_AccountsToTeams_AccountIdNestedInput
+    Teams_AccountsToTeams_AgentId?: TeamsUpdateManyWithoutAccounts_AccountsToTeams_AgentIdNestedInput
+  }
+
+  export type AccountsUncheckedUpdateWithoutLandsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    verifyToken?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
+    Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
+    Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
+    CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
+    Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
+    Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
+    OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
+    Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
+    Permissions?: PermissionsUncheckedUpdateManyWithoutAccountsNestedInput
+    PostAccounts?: PostAccountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Posts?: PostsUncheckedUpdateManyWithoutAccountsNestedInput
+    Reports?: ReportsUncheckedUpdateManyWithoutAccountsNestedInput
+    Statistics?: StatisticsUncheckedUpdateManyWithoutAccountsNestedInput
+    Subscribes?: SubscribesUncheckedUpdateManyWithoutAccountsNestedInput
+    TaskDetailResources?: TaskDetailResourcesUncheckedUpdateManyWithoutAccountsNestedInput
+    TaskDetails?: TaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
+    TaskGroups?: TaskGroupsUncheckedUpdateManyWithoutAccountsNestedInput
+    Tasks?: TasksUncheckedUpdateManyWithoutAccountsNestedInput
+    TeamAgents?: TeamAgentsUncheckedUpdateManyWithoutAccountsNestedInput
+    Teams_AccountsToTeams_AccountId?: TeamsUncheckedUpdateManyWithoutAccounts_AccountsToTeams_AccountIdNestedInput
+    Teams_AccountsToTeams_AgentId?: TeamsUncheckedUpdateManyWithoutAccounts_AccountsToTeams_AgentIdNestedInput
+  }
+
   export type AccountsCreateWithoutNotificationsInput = {
     phone?: string | null
     verifyToken?: number | null
@@ -42043,11 +45004,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
     Permissions?: PermissionsCreateNestedManyWithoutAccountsInput
@@ -42078,11 +45041,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
     Permissions?: PermissionsUncheckedCreateNestedManyWithoutAccountsInput
@@ -42122,11 +45087,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
     Permissions?: PermissionsUpdateManyWithoutAccountsNestedInput
@@ -42157,11 +45124,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
     Permissions?: PermissionsUncheckedUpdateManyWithoutAccountsNestedInput
@@ -42191,11 +45160,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
     Permissions?: PermissionsCreateNestedManyWithoutAccountsInput
@@ -42226,11 +45197,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
     Permissions?: PermissionsUncheckedCreateNestedManyWithoutAccountsInput
@@ -42352,11 +45325,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
     Permissions?: PermissionsUpdateManyWithoutAccountsNestedInput
@@ -42387,11 +45362,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
     Permissions?: PermissionsUncheckedUpdateManyWithoutAccountsNestedInput
@@ -42503,11 +45480,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Permissions?: PermissionsCreateNestedManyWithoutAccountsInput
@@ -42538,11 +45517,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Permissions?: PermissionsUncheckedCreateNestedManyWithoutAccountsInput
@@ -42694,11 +45675,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Permissions?: PermissionsUpdateManyWithoutAccountsNestedInput
@@ -42729,11 +45712,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Permissions?: PermissionsUncheckedUpdateManyWithoutAccountsNestedInput
@@ -42829,11 +45814,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -42864,11 +45851,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -42908,11 +45897,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -42943,11 +45934,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -42977,11 +45970,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -43012,11 +46007,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -43106,11 +46103,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -43141,11 +46140,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -43225,11 +46226,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -43260,11 +46263,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -43329,11 +46334,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -43364,11 +46371,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -43593,11 +46602,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -43628,11 +46639,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -43720,11 +46733,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -43755,11 +46770,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -43825,7 +46842,7 @@ export namespace Prisma {
     Teams?: TeamsUncheckedUpdateManyWithoutTasksNestedInput
   }
 
-  export type AccountsCreateWithoutStatisticsInput = {
+  export type AccountsCreateWithoutServicesInput = {
     phone?: string | null
     verifyToken?: number | null
     createdAt: Date | string
@@ -43842,6 +46859,126 @@ export namespace Prisma {
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
+    Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
+    OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
+    Orders?: OrdersCreateNestedManyWithoutAccountsInput
+    Permissions?: PermissionsCreateNestedManyWithoutAccountsInput
+    PostAccounts?: PostAccountsCreateNestedManyWithoutAccountsInput
+    Posts?: PostsCreateNestedManyWithoutAccountsInput
+    Reports?: ReportsCreateNestedManyWithoutAccountsInput
+    Statistics?: StatisticsCreateNestedManyWithoutAccountsInput
+    Subscribes?: SubscribesCreateNestedManyWithoutAccountsInput
+    TaskDetailResources?: TaskDetailResourcesCreateNestedManyWithoutAccountsInput
+    TaskDetails?: TaskDetailsCreateNestedManyWithoutAccountsInput
+    TaskGroups?: TaskGroupsCreateNestedManyWithoutAccountsInput
+    Tasks?: TasksCreateNestedManyWithoutAccountsInput
+    TeamAgents?: TeamAgentsCreateNestedManyWithoutAccountsInput
+    Teams_AccountsToTeams_AccountId?: TeamsCreateNestedManyWithoutAccounts_AccountsToTeams_AccountIdInput
+    Teams_AccountsToTeams_AgentId?: TeamsCreateNestedManyWithoutAccounts_AccountsToTeams_AgentIdInput
+  }
+
+  export type AccountsUncheckedCreateWithoutServicesInput = {
+    id?: number
+    phone?: string | null
+    verifyToken?: number | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: boolean | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    isVerify?: boolean | null
+    isApprove?: boolean | null
+    Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
+    Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
+    CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
+    Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
+    Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
+    Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
+    OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
+    Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
+    Permissions?: PermissionsUncheckedCreateNestedManyWithoutAccountsInput
+    PostAccounts?: PostAccountsUncheckedCreateNestedManyWithoutAccountsInput
+    Posts?: PostsUncheckedCreateNestedManyWithoutAccountsInput
+    Reports?: ReportsUncheckedCreateNestedManyWithoutAccountsInput
+    Statistics?: StatisticsUncheckedCreateNestedManyWithoutAccountsInput
+    Subscribes?: SubscribesUncheckedCreateNestedManyWithoutAccountsInput
+    TaskDetailResources?: TaskDetailResourcesUncheckedCreateNestedManyWithoutAccountsInput
+    TaskDetails?: TaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
+    TaskGroups?: TaskGroupsUncheckedCreateNestedManyWithoutAccountsInput
+    Tasks?: TasksUncheckedCreateNestedManyWithoutAccountsInput
+    TeamAgents?: TeamAgentsUncheckedCreateNestedManyWithoutAccountsInput
+    Teams_AccountsToTeams_AccountId?: TeamsUncheckedCreateNestedManyWithoutAccounts_AccountsToTeams_AccountIdInput
+    Teams_AccountsToTeams_AgentId?: TeamsUncheckedCreateNestedManyWithoutAccounts_AccountsToTeams_AgentIdInput
+  }
+
+  export type AccountsCreateOrConnectWithoutServicesInput = {
+    where: AccountsWhereUniqueInput
+    create: XOR<AccountsCreateWithoutServicesInput, AccountsUncheckedCreateWithoutServicesInput>
+  }
+
+  export type AccountsCreateManyServicesInputEnvelope = {
+    data: Enumerable<AccountsCreateManyServicesInput>
+    skipDuplicates?: boolean
+  }
+
+  export type AccountsUpsertWithWhereUniqueWithoutServicesInput = {
+    where: AccountsWhereUniqueInput
+    update: XOR<AccountsUpdateWithoutServicesInput, AccountsUncheckedUpdateWithoutServicesInput>
+    create: XOR<AccountsCreateWithoutServicesInput, AccountsUncheckedCreateWithoutServicesInput>
+  }
+
+  export type AccountsUpdateWithWhereUniqueWithoutServicesInput = {
+    where: AccountsWhereUniqueInput
+    data: XOR<AccountsUpdateWithoutServicesInput, AccountsUncheckedUpdateWithoutServicesInput>
+  }
+
+  export type AccountsUpdateManyWithWhereWithoutServicesInput = {
+    where: AccountsScalarWhereInput
+    data: XOR<AccountsUpdateManyMutationInput, AccountsUncheckedUpdateManyWithoutAccountsInput>
+  }
+
+  export type AccountsScalarWhereInput = {
+    AND?: Enumerable<AccountsScalarWhereInput>
+    OR?: Enumerable<AccountsScalarWhereInput>
+    NOT?: Enumerable<AccountsScalarWhereInput>
+    id?: IntFilter | number
+    phone?: StringNullableFilter | string | null
+    verifyToken?: IntNullableFilter | number | null
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+    profile?: JsonNullableFilter
+    isAdmin?: BoolNullableFilter | boolean | null
+    email?: StringNullableFilter | string | null
+    password?: StringNullableFilter | string | null
+    name?: StringNullableFilter | string | null
+    isVerify?: BoolNullableFilter | boolean | null
+    isApprove?: BoolNullableFilter | boolean | null
+    ServiceKey?: StringNullableFilter | string | null
+  }
+
+  export type AccountsCreateWithoutStatisticsInput = {
+    phone?: string | null
+    verifyToken?: number | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: boolean | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    isVerify?: boolean | null
+    isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
+    Alerts?: AlertsCreateNestedManyWithoutAccountsInput
+    Careers?: CareersCreateNestedManyWithoutAccountsInput
+    CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
+    Customers?: CustomersCreateNestedManyWithoutAccountsInput
+    Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -43872,11 +47009,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -43998,11 +47137,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -44033,11 +47174,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -44149,11 +47292,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -44184,11 +47329,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -44228,11 +47375,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -44263,11 +47412,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -44297,11 +47448,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -44332,11 +47485,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -44434,11 +47589,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -44469,11 +47626,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -44561,11 +47720,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -44596,11 +47757,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -44751,11 +47914,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -44786,11 +47951,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -44918,11 +48085,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -44953,11 +48122,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -45050,11 +48221,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -45085,11 +48258,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -45135,11 +48310,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -45170,11 +48347,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -45408,11 +48587,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -45443,11 +48624,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -45571,11 +48754,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -45606,11 +48791,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -45684,11 +48871,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -45719,11 +48908,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -45787,11 +48978,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -45822,11 +49015,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -45861,11 +49056,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    Services?: ServicesCreateNestedOneWithoutAccountsInput
     Alerts?: AlertsCreateNestedManyWithoutAccountsInput
     Careers?: CareersCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsCreateNestedManyWithoutAccountsInput
     Customers?: CustomersCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsCreateNestedManyWithoutAccountsInput
+    Lands?: LandsCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesCreateNestedManyWithoutAccountsInput
     Orders?: OrdersCreateNestedManyWithoutAccountsInput
@@ -45896,11 +49093,13 @@ export namespace Prisma {
     name?: string | null
     isVerify?: boolean | null
     isApprove?: boolean | null
+    ServiceKey?: string | null
     Alerts?: AlertsUncheckedCreateNestedManyWithoutAccountsInput
     Careers?: CareersUncheckedCreateNestedManyWithoutAccountsInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedCreateNestedManyWithoutAccountsInput
     Customers?: CustomersUncheckedCreateNestedManyWithoutAccountsInput
     Discounts?: DiscountsUncheckedCreateNestedManyWithoutAccountsInput
+    Lands?: LandsUncheckedCreateNestedManyWithoutAccountsInput
     Notifications?: NotificationsUncheckedCreateNestedManyWithoutAccountsInput
     OrderHistories?: OrderHistoriesUncheckedCreateNestedManyWithoutAccountsInput
     Orders?: OrdersUncheckedCreateNestedManyWithoutAccountsInput
@@ -46106,11 +49305,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -46141,11 +49342,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -46180,11 +49383,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Services?: ServicesUpdateOneWithoutAccountsNestedInput
     Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUpdateManyWithoutAccountsNestedInput
@@ -46215,11 +49420,13 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    ServiceKey?: NullableStringFieldUpdateOperationsInput | string | null
     Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
     Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
     CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
     Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
     Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
     Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
     Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
@@ -46391,6 +49598,21 @@ export namespace Prisma {
     CouponId?: number | null
     ProductId?: number | null
     filters?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type LandsCreateManyAccountsInput = {
+    id?: bigint | number
+    is_active?: boolean | null
+    type?: string | null
+    villageName?: string | null
+    status?: string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: string | null
+    y?: string | null
+    area?: Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt: Date | string
+    updatedAt: Date | string
   }
 
   export type NotificationsCreateManyAccountsInput = {
@@ -46789,6 +50011,51 @@ export namespace Prisma {
     CouponId?: NullableIntFieldUpdateOperationsInput | number | null
     ProductId?: NullableIntFieldUpdateOperationsInput | number | null
     filters?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type LandsUpdateWithoutAccountsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandsUncheckedUpdateWithoutAccountsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandsUncheckedUpdateManyWithoutLandsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    villageName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    geometry?: NullableJsonNullValueInput | InputJsonValue
+    x?: NullableStringFieldUpdateOperationsInput | string | null
+    y?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    extra?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationsUpdateWithoutAccountsInput = {
@@ -47809,6 +51076,109 @@ export namespace Prisma {
     issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Discounts?: DiscountsUncheckedUpdateManyWithoutOrdersNestedInput
     OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutOrdersNestedInput
+  }
+
+  export type AccountsCreateManyServicesInput = {
+    id?: number
+    phone?: string | null
+    verifyToken?: number | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: boolean | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    isVerify?: boolean | null
+    isApprove?: boolean | null
+  }
+
+  export type AccountsUpdateWithoutServicesInput = {
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    verifyToken?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Alerts?: AlertsUpdateManyWithoutAccountsNestedInput
+    Careers?: CareersUpdateManyWithoutAccountsNestedInput
+    CustomerTaskDetails?: CustomerTaskDetailsUpdateManyWithoutAccountsNestedInput
+    Customers?: CustomersUpdateManyWithoutAccountsNestedInput
+    Discounts?: DiscountsUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUpdateManyWithoutAccountsNestedInput
+    Notifications?: NotificationsUpdateManyWithoutAccountsNestedInput
+    OrderHistories?: OrderHistoriesUpdateManyWithoutAccountsNestedInput
+    Orders?: OrdersUpdateManyWithoutAccountsNestedInput
+    Permissions?: PermissionsUpdateManyWithoutAccountsNestedInput
+    PostAccounts?: PostAccountsUpdateManyWithoutAccountsNestedInput
+    Posts?: PostsUpdateManyWithoutAccountsNestedInput
+    Reports?: ReportsUpdateManyWithoutAccountsNestedInput
+    Statistics?: StatisticsUpdateManyWithoutAccountsNestedInput
+    Subscribes?: SubscribesUpdateManyWithoutAccountsNestedInput
+    TaskDetailResources?: TaskDetailResourcesUpdateManyWithoutAccountsNestedInput
+    TaskDetails?: TaskDetailsUpdateManyWithoutAccountsNestedInput
+    TaskGroups?: TaskGroupsUpdateManyWithoutAccountsNestedInput
+    Tasks?: TasksUpdateManyWithoutAccountsNestedInput
+    TeamAgents?: TeamAgentsUpdateManyWithoutAccountsNestedInput
+    Teams_AccountsToTeams_AccountId?: TeamsUpdateManyWithoutAccounts_AccountsToTeams_AccountIdNestedInput
+    Teams_AccountsToTeams_AgentId?: TeamsUpdateManyWithoutAccounts_AccountsToTeams_AgentIdNestedInput
+  }
+
+  export type AccountsUncheckedUpdateWithoutServicesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    verifyToken?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Alerts?: AlertsUncheckedUpdateManyWithoutAccountsNestedInput
+    Careers?: CareersUncheckedUpdateManyWithoutAccountsNestedInput
+    CustomerTaskDetails?: CustomerTaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
+    Customers?: CustomersUncheckedUpdateManyWithoutAccountsNestedInput
+    Discounts?: DiscountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Lands?: LandsUncheckedUpdateManyWithoutAccountsNestedInput
+    Notifications?: NotificationsUncheckedUpdateManyWithoutAccountsNestedInput
+    OrderHistories?: OrderHistoriesUncheckedUpdateManyWithoutAccountsNestedInput
+    Orders?: OrdersUncheckedUpdateManyWithoutAccountsNestedInput
+    Permissions?: PermissionsUncheckedUpdateManyWithoutAccountsNestedInput
+    PostAccounts?: PostAccountsUncheckedUpdateManyWithoutAccountsNestedInput
+    Posts?: PostsUncheckedUpdateManyWithoutAccountsNestedInput
+    Reports?: ReportsUncheckedUpdateManyWithoutAccountsNestedInput
+    Statistics?: StatisticsUncheckedUpdateManyWithoutAccountsNestedInput
+    Subscribes?: SubscribesUncheckedUpdateManyWithoutAccountsNestedInput
+    TaskDetailResources?: TaskDetailResourcesUncheckedUpdateManyWithoutAccountsNestedInput
+    TaskDetails?: TaskDetailsUncheckedUpdateManyWithoutAccountsNestedInput
+    TaskGroups?: TaskGroupsUncheckedUpdateManyWithoutAccountsNestedInput
+    Tasks?: TasksUncheckedUpdateManyWithoutAccountsNestedInput
+    TeamAgents?: TeamAgentsUncheckedUpdateManyWithoutAccountsNestedInput
+    Teams_AccountsToTeams_AccountId?: TeamsUncheckedUpdateManyWithoutAccounts_AccountsToTeams_AccountIdNestedInput
+    Teams_AccountsToTeams_AgentId?: TeamsUncheckedUpdateManyWithoutAccounts_AccountsToTeams_AgentIdNestedInput
+  }
+
+  export type AccountsUncheckedUpdateManyWithoutAccountsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    verifyToken?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerify?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isApprove?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type TaskDetailResourcesCreateManyTaskDetailsInput = {

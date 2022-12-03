@@ -21,11 +21,14 @@ model Accounts {
   name                            String?               @db.VarChar(255)
   isVerify                        Boolean?              @default(false)
   isApprove                       Boolean?              @default(true)
+  ServiceKey                      String?               @db.VarChar(255)
+  Services                        Services?             @relation(fields: [ServiceKey], references: [key], onUpdate: NoAction)
   Alerts                          Alerts[]
   Careers                         Careers[]
   CustomerTaskDetails             CustomerTaskDetails[]
   Customers                       Customers[]
   Discounts                       Discounts[]
+  Lands                           Lands[]
   Notifications                   Notifications[]
   OrderHistories                  OrderHistories[]
   Orders                          Orders[]
@@ -182,6 +185,23 @@ model Geos {
 
   @@index([address], map: "geos_address")
   @@index([x, y], map: "geos_x_y")
+}
+
+model Lands {
+  id          BigInt   @id @default(autoincrement())
+  AccountId   Int
+  is_active   Boolean? @default(true)
+  type        String?  @db.VarChar(255)
+  villageName String?  @db.VarChar(255)
+  status      String?  @db.VarChar(255)
+  geometry    Json?    @db.Json
+  x           String?  @db.VarChar(255)
+  y           String?  @db.VarChar(255)
+  area        Decimal? @db.Decimal(19, 10)
+  extra       Json?    @default("{}")
+  createdAt   DateTime @db.Timestamptz(6)
+  updatedAt   DateTime @db.Timestamptz(6)
+  Accounts    Accounts @relation(fields: [AccountId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Notices {
@@ -368,6 +388,15 @@ model Reports {
 
 model SequelizeMeta {
   name String @id @db.VarChar(255)
+}
+
+model Services {
+  key         String     @id @unique(map: "services_key") @db.VarChar(255)
+  description String?
+  isActive    Boolean?   @default(true)
+  createdAt   DateTime   @db.Timestamptz(6)
+  updatedAt   DateTime   @db.Timestamptz(6)
+  Accounts    Accounts[]
 }
 
 model Statistics {
