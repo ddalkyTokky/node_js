@@ -33,14 +33,19 @@ const authUtil = {
         }
         return res.json(users)
         */
+        if (String(req.headers.request_type) === "undefined") {
+            //console.log("request_type non-exist");
+            return res.status(200).send("Token OK");
+        }
 
         try {
             const return_value = await load_replica(String(req.headers.request_type));
-            //console.log(return_value);
+            //console.log("DB success");
             return res.json(return_value);
         }
         catch (e) {
-            return res.status(404).send("DB Not Found");
+            //console.log("DB Fail");
+            return res.status(404).send("DB Connection Fail");
         }
 
         //next();
@@ -52,8 +57,11 @@ const authUtil = {
 const { PrismaClient: ReplicaPrismaClient } = require('../prisma/replicaClient/index.js');
 const replicaClient = new ReplicaPrismaClient();
 
-const { PrismaClient: Replica2PrismaClient } = require('../prisma/replica2Client/index.js');
-const replica2Client = new Replica2PrismaClient();
+//const { PrismaClient: Replica2PrismaClient } = require('../prisma/replica2Client/index.js');
+//const replica2Client = new Replica2PrismaClient();
+
+const { PrismaClient: StatisticsPrismaClient } = require('../prisma/statisticsClient/index.js');
+const statisticsClient = new StatisticsPrismaClient();
 
 async function load_replica(request_type) {
     if (request_type == 'pilot') {
@@ -62,7 +70,7 @@ async function load_replica(request_type) {
                 select: {
                     id: true,
                     name: true,
-                    phone: true,
+                    //phone: true,
                     createdAt: true,
                     profile: true
                 }
@@ -103,16 +111,16 @@ async function load_replica(request_type) {
         //console.log(pilotResult);
         return pilotResult;
     }
-
-    if (request_type == 'farmer') {
-        const farmerResult = await replica2Client.Users.
-            findMany({
-            })
-
-        console.log(farmerResult);
-        return farmerResult;
-    }
-
+    /*
+        if (request_type == 'farmer') {
+            const farmerResult = await replica2Client.Users.
+                findMany({
+                })
+    
+            console.log(farmerResult);
+            return farmerResult;
+        }
+    */
     if (request_type == 'taskgroup') {
         const tgResult = await replicaClient.TaskGroups.
             findMany({
@@ -160,7 +168,7 @@ async function load_replica(request_type) {
 
             try {
                 var sum = 0;
-                for(var j = 0; j < tgResult[i].Tasks.length; j++){
+                for (var j = 0; j < tgResult[i].Tasks.length; j++) {
                     sum += tgResult[i].Tasks[j]._count.TaskDetails;
                 }
                 tgResult[i].TDCount = sum;
@@ -267,7 +275,8 @@ async function load_replica(request_type) {
                             }
                         }
                     }
-                }
+                },
+                take: 10000
             })
 
         for (var i = 0; i < tdResult.length; i++) {
@@ -338,6 +347,38 @@ async function load_replica(request_type) {
 
         //console.log(teamResult);
         return teamResult;
+    }
+
+    if (request_type == 'tgchart') {
+        const tgStatistics = await statisticsClient.countTG.
+            findMany({ })
+
+        //console.log(taskStatistics);
+        return tgStatistics;
+    }
+
+    if (request_type == 'taskchart') {
+        const taskStatistics = await statisticsClient.countTasks.
+            findMany({ })
+
+        //console.log(taskStatistics);
+        return taskStatistics;
+    }
+
+    if (request_type == 'tdchart') {
+        const tdStatistics = await statisticsClient.countTD.
+            findMany({ })
+
+        //console.log(taskStatistics);
+        return tdStatistics;
+    }
+
+    if (request_type == 'teamchart') {
+        const teamStatistics = await statisticsClient.countT.
+            findMany({ })
+
+        //console.log(taskStatistics);
+        return teamStatistics;
     }
 }
 
