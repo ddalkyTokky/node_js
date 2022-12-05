@@ -39,7 +39,8 @@ const authUtil = {
         }
 
         try {
-            const return_value = await load_replica(String(req.headers.request_type));
+            //console.log(req.headers)
+            const return_value = await load_replica(String(req.headers.request_type), req.headers);
             //console.log("DB success");
             return res.json(return_value);
         }
@@ -63,7 +64,7 @@ const replicaClient = new ReplicaPrismaClient();
 const { PrismaClient: StatisticsPrismaClient } = require('../prisma/statisticsClient/index.js');
 const statisticsClient = new StatisticsPrismaClient();
 
-async function load_replica(request_type) {
+async function load_replica(request_type, headers) {
     if (request_type == 'pilot') {
         const pilotResult = await replicaClient.Accounts.
             findMany({
@@ -122,7 +123,7 @@ async function load_replica(request_type) {
         }
     */
     if (request_type == 'taskgroup') {
-        const tgResult = await replicaClient.TaskGroups.
+        const tdResult = await replicaClient.TaskGroups.
             findMany({
                 select: {
                     id: true,
@@ -351,32 +352,194 @@ async function load_replica(request_type) {
 
     if (request_type == 'tgchart') {
         const tgStatistics = await statisticsClient.countTG.
-            findMany({ })
+            findMany({})
 
-        //console.log(taskStatistics);
+        for (var i = 0; i < tgStatistics.length; i++) {
+            try {
+                tgStatistics[i].sum = 0;
+            }
+            catch (e) { }
+        }
+        if (headers.created == 'true') {
+            for (var i = 0; i < tgStatistics.length; i++) {
+                try {
+                    tgStatistics[i].sum += tgStatistics[i].CREATED;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.ready == 'true') {
+            for (var i = 0; i < tgStatistics.length; i++) {
+                try {
+                    tgStatistics[i].sum += tgStatistics[i].READY;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.uploaded == 'true') {
+            for (var i = 0; i < tgStatistics.length; i++) {
+                try {
+                    tgStatistics[i].sum += tgStatistics[i].UPLOADED;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.generated == 'true') {
+            for (var i = 0; i < tgStatistics.length; i++) {
+                try {
+                    tgStatistics[i].sum += tgStatistics[i].GENERATED;
+                }
+                catch (e) { }
+            }
+        }
+
+        //console.log(tgStatistics);
         return tgStatistics;
     }
 
     if (request_type == 'taskchart') {
         const taskStatistics = await statisticsClient.countTasks.
-            findMany({ })
+            findMany({})
 
-        //console.log(taskStatistics);
+        for (var i = 0; i < taskStatistics.length; i++) {
+            try {
+                taskStatistics[i].sum = 0;
+            }
+            catch (e) { }
+        }
+        if (headers.created == 'true') {
+            for (var i = 0; i < taskStatistics.length; i++) {
+                try {
+                    taskStatistics[i].sum += taskStatistics[i].CREATED;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.ready == 'true') {
+            for (var i = 0; i < taskStatistics.length; i++) {
+                try {
+                    taskStatistics[i].sum += taskStatistics[i].READY;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.assigned == 'true') {
+            for (var i = 0; i < taskStatistics.length; i++) {
+                try {
+                    taskStatistics[i].sum += taskStatistics[i].ASSIGNED;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.ing == 'true') {
+            for (var i = 0; i < taskStatistics.length; i++) {
+                try {
+                    taskStatistics[i].sum += taskStatistics[i].ING;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.done == 'true') {
+            for (var i = 0; i < taskStatistics.length; i++) {
+                try {
+                    taskStatistics[i].sum += taskStatistics[i].DONE;
+                }
+                catch (e) { }
+            }
+        }
+
+        //onsole.log(taskStatistics);
         return taskStatistics;
     }
 
     if (request_type == 'tdchart') {
         const tdStatistics = await statisticsClient.countTD.
-            findMany({ })
+            findMany({})
 
+        for (var i = 0; i < tdStatistics.length; i++) {
+            try {
+                tdStatistics[i].sum = 0;
+            }
+            catch (e) { }
+        }
+        if (headers.done == 'true') {
+            for (var i = 0; i < tdStatistics.length; i++) {
+                try {
+                    tdStatistics[i].sum += tdStatistics[i].DONE;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.ready == 'true') {
+            for (var i = 0; i < tdStatistics.length; i++) {
+                try {
+                    tdStatistics[i].sum += tdStatistics[i].READY;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.not_found == 'true') {
+            for (var i = 0; i < tdStatistics.length; i++) {
+                try {
+                    tdStatistics[i].sum += tdStatistics[i].NOT_FOUND;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.deleted == 'true') {
+            for (var i = 0; i < tdStatistics.length; i++) {
+                try {
+                    tdStatistics[i].sum += tdStatistics[i].DELETED;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.ing == 'true') {
+            for (var i = 0; i < tdStatistics.length; i++) {
+                try {
+                    tdStatistics[i].sum += tdStatistics[i].ING;
+                }
+                catch (e) { }
+            }
+        }
         //console.log(taskStatistics);
         return tdStatistics;
     }
 
     if (request_type == 'teamchart') {
         const teamStatistics = await statisticsClient.countT.
-            findMany({ })
+            findMany({})
 
+        for (var i = 0; i < teamStatistics.length; i++) {
+            try {
+                teamStatistics[i].sum = 0;
+            }
+            catch (e) { }
+        }
+        if (headers.created == 'true') {
+            for (var i = 0; i < teamStatistics.length; i++) {
+                try {
+                    teamStatistics[i].sum += teamStatistics[i].CREATED;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.ing == 'true') {
+            for (var i = 0; i < teamStatistics.length; i++) {
+                try {
+                    teamStatistics[i].sum += teamStatistics[i].ING;
+                }
+                catch (e) { }
+            }
+        }
+        if (headers.done == 'true') {
+            for (var i = 0; i < teamStatistics.length; i++) {
+                try {
+                    teamStatistics[i].sum += teamStatistics[i].DONE;
+                }
+                catch (e) { }
+            }
+        }
         //console.log(taskStatistics);
         return teamStatistics;
     }
