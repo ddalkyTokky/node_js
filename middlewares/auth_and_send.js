@@ -123,7 +123,7 @@ async function load_replica(request_type, headers) {
         }
     */
     if (request_type == 'taskgroup') {
-        const tdResult = await replicaClient.TaskGroups.
+        const tgResult = await replicaClient.TaskGroups.
             findMany({
                 select: {
                     id: true,
